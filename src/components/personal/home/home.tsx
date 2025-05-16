@@ -13,7 +13,7 @@ const Home = () => {
       setIsLoadingAuthStatus(true);
       try {
         // Ajusta este endpoint a tu configuración real en @users.js o similar
-        const response = await fetch("http://localhost:3000/api/login/status", {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login/status`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

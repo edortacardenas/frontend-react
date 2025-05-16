@@ -44,7 +44,7 @@ const Config = () => {
   const loadProfileData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api/profile", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ const Config = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/profile", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const Config = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/profile", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
