@@ -1,6 +1,6 @@
 // The API key is now handled by the backend.
-const BACKEND_NEWS_URL = `${process.env.VITE_BACKEND_URL}/api/top-headlines`; // URL for your backend endpoint
-console.log(BACKEND_NEWS_URL)
+const BACKEND_NEWS_URL = `${import.meta.env.VITE_BACKEND_URL}/api/top-headlines`; // URL for your backend endpoint
+
 
 export interface Article {
   source: {
