@@ -1,7 +1,6 @@
 //Importamos desde pages q es el q esta haciendo el lazy load
 
-import Noticias from "./components/social/noticias"
-import { Config, Dasboard, ForgotPassword, Home, Login, Register, ResetPassword, VerifyEmail} from "./pages"
+import { Config, Dasboard, ForgotPassword, Home, Login, Register, ResetPassword, VerifyEmail, Noticias} from "./pages"
 
 export const routes = [
     {
