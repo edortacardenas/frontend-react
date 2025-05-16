@@ -1,5 +1,6 @@
 // The API key is now handled by the backend.
 const BACKEND_NEWS_URL = `${process.env.VITE_BACKEND_URL}/api/top-headlines`; // URL for your backend endpoint
+console.log(BACKEND_NEWS_URL)
 
 export interface Article {
   source: {
@@ -30,11 +31,10 @@ interface BackendErrorResponse {
   details?: string;
 }
 
-export const getNewsFetch = async (page = 1, pageSize = 10): Promise<Article[]> => {
-  // API_KEY is no longer needed here as the backend handles it.
-  
+export const getNewsFetch = async (country = 'us', page = 1, pageSize = 10): Promise<Article[]> => {
+  // ...
   const params = new URLSearchParams({
-    country: 'us', // Puedes cambiar el país o hacerlo configurable
+    country: country, // Usar el parámetro
     page: String(page),
     pageSize: String(pageSize),
   });
@@ -72,12 +72,11 @@ export const getNewsFetch = async (page = 1, pageSize = 10): Promise<Article[]> 
   }
 };
 
-export const checkNewsApiConnectionFetch = async (): Promise<boolean> => {
+export const checkNewsApiConnectionFetch = async (country = 'us'): Promise<boolean> => {
   try {
-    await getNewsFetch(1, 1); // Intenta obtener un artículo para verificar la conexión
+    await getNewsFetch(country, 1, 1); // Pasar el país
     return true;
   } catch (error) {
-    // El error ya se loguea en getNewsFetch
     return false;
   }
 };
