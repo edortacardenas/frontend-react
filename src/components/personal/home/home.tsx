@@ -24,12 +24,19 @@ const Home = () => {
         if (response.ok) {
           const data = await response.json();
           setIsAuthenticated(data.isAuthenticated); // Asume que el backend devuelve { isAuthenticated: boolean }
+        } else if (response.status === 401) {
+          // Usuario no autenticado, es un caso esperado.
+          // No es necesario un console.error aquí.
+          setIsAuthenticated(false);
         } else {
-          // Si hay un error (ej. 401 Unauthorized), asumimos que no está autenticado
+          // Otro tipo de error HTTP (ej. 403, 404, 500).
+          // Estos sí podrían ser inesperados para esta llamada y merecen una advertencia.
+          console.warn(`Unexpected HTTP error when checking auth status: ${response.status} ${response.statusText}`);
           setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error("Error checking auth status:", error);
+        // Error de red (servidor no alcanzable, DNS, etc.) o error al parsear JSON.
+        console.error("Network or parsing error checking auth status:", error);
         setIsAuthenticated(false); // En caso de error de red, etc.
       } finally {
         setIsLoadingAuthStatus(false);
