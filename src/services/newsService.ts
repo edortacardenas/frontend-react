@@ -31,10 +31,11 @@ interface BackendErrorResponse {
   details?: string;
 }
 
-export const getNewsFetch = async (country = 'us', page = 1, pageSize = 10): Promise<Article[]> => {
-  // ...
+export const getNewsFetch = async (page = 1, pageSize = 10): Promise<Article[]> => {
+  // API_KEY is no longer needed here as the backend handles it.
+  
   const params = new URLSearchParams({
-    country: country, // Usar el parámetro
+    country: 'us', // Puedes cambiar el país o hacerlo configurable
     page: String(page),
     pageSize: String(pageSize),
   });
@@ -72,11 +73,12 @@ export const getNewsFetch = async (country = 'us', page = 1, pageSize = 10): Pro
   }
 };
 
-export const checkNewsApiConnectionFetch = async (country = 'us'): Promise<boolean> => {
+export const checkNewsApiConnectionFetch = async (): Promise<boolean> => {
   try {
-    await getNewsFetch(country, 1, 1); // Pasar el país
+    await getNewsFetch(1, 1); // Intenta obtener un artículo para verificar la conexión
     return true;
   } catch (error) {
+    // El error ya se loguea en getNewsFetch
     return false;
   }
 };
