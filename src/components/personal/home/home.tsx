@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"; // Asegúrate que la ruta sea correcta
+import { fetchAuthStatus } from "../../../lib/helpers"; // Import the new helper function
 import Spinner from "@/components/ui/spinner"; // Asumiendo que tienes un componente Spinner
 
 const Home = () => {
@@ -9,41 +10,22 @@ const Home = () => {
   const [isLoadingAuthStatus, setIsLoadingAuthStatus] = useState(true);
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
+    const verifyUserAuthentication = async () => {
       setIsLoadingAuthStatus(true);
       try {
-        // Ajusta este endpoint a tu configuración real en @users.js o similar
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login/status`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Importante para enviar cookies de sesión
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsAuthenticated(data.isAuthenticated); // Asume que el backend devuelve { isAuthenticated: boolean }
-        } else if (response.status === 401) {
-          // Usuario no autenticado, es un caso esperado.
-          // No es necesario un console.error aquí.
-          setIsAuthenticated(false);
-        } else {
-          // Otro tipo de error HTTP (ej. 403, 404, 500).
-          // Estos sí podrían ser inesperados para esta llamada y merecen una advertencia.
-          console.warn(`Unexpected HTTP error when checking auth status: ${response.status} ${response.statusText}`);
-          setIsAuthenticated(false);
-        }
+        const authData = await fetchAuthStatus();
+        setIsAuthenticated(authData);
       } catch (error) {
-        // Error de red (servidor no alcanzable, DNS, etc.) o error al parsear JSON.
-        console.error("Network or parsing error checking auth status:", error);
-        setIsAuthenticated(false); // En caso de error de red, etc.
+        // Errors (network, unexpected HTTP, parsing) are logged by fetchAuthStatus.
+        // The component ensures the UI reflects an unauthenticated state on any error.
+        console.error("Failed to verify authentication status in Home component:", error);
+        setIsAuthenticated(false);
       } finally {
         setIsLoadingAuthStatus(false);
       }
     };
 
-    checkAuthStatus();
+    verifyUserAuthentication();
   }, []);
 
   return (

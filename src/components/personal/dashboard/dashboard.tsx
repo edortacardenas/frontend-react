@@ -18,28 +18,23 @@ import {
 import { Input } from "@/components/ui/input"; // Para los campos del formulario
 import { Label } from "@/components/ui/label"; // Para las etiquetas del formulario
 import { Checkbox } from "@/components/ui/checkbox"; // Para el campo isAdmin
-
-enum Role {
-  USER = "user",
-  ADMIN = "admin",
-}
-
-interface User {
-  id: string | number; // Asumiendo que el ID puede ser string o number
-  name: string;
-  email: string;
-  // Agrega otros campos que esperes de tu API
-  role: Role;
-}
-
-interface UpdateUserFormData {
-  name: string;
-  email: string;
-  role: Role; 
-}
+import {
+  fetchAuthStatus,
+  logoutUser,
+  fetchAdminRole, // You might not need this if fetchAuthStatus provides isAdmin
+  fetchAllUsers,
+  deleteUserById,
+  fetchUserDetailsById,
+  updateUserById,
+  Role, // Import from helpers
+  User, // Import from helpers
+  UpdateUserFormData // Import from helpers
+} from "../../../lib/helpers";
 
 const Dashboard = () => {
   const navigate = useNavigate(); // Hook para redirigir
+  const [isInitialAuthLoading, setIsInitialAuthLoading] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [isCheckingConnection, setIsCheckingConnection] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -52,59 +47,74 @@ const Dashboard = () => {
   const [isLoadingCurrentUserDetails, setIsLoadingCurrentUserDetails] = useState(false);
   const [isSubmittingUpdate, setIsSubmittingUpdate] = useState(false);
 
-  const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
+  // Initial authentication check
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      setIsInitialAuthLoading(true);
+      try {
+        // Asumimos que fetchAuthStatus() devuelve: Promise<boolean>
+        const isAuthenticated = await fetchAuthStatus();
+        if (isAuthenticated) {
+          setIsUserAuthenticated(true);
+          // El rol de admin se obtendrá en el siguiente useEffect
+        } else {
+          toast.error("Acceso denegado. Por favor, inicia sesión.");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error checking authentication status for dashboard:", error);
+        toast.error("Error al verificar autenticación. Redirigiendo al login.");
+        navigate("/login");
+      } finally {
+        setIsInitialAuthLoading(false);
+      }
+    };
+    checkAuthentication();
+  }, [navigate]);
 
   const handlelogout = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Considerar enviar el token de autorización si tu backend lo requiere para logout
-        },
-        credentials: "include", // Incluye cookies en la solicitud
-      });
-      navigate("/login")
-      if (response.status === 401) {
-        toast.error("No autorizado. Por favor, inicia sesión nuevamente.");
-      } else {
-        // El logout exitoso podría no devolver JSON, o devolver un mensaje.
-        if (response.ok) {
-          toast.success("Sesión cerrada exitosamente.");
-        } else {
-          const errorData = await response.json().catch(() => ({ message: "Error al cerrar sesión."}));
-          toast.error(errorData.message);
-        }
+      await logoutUser();
+      toast.success("Sesión cerrada exitosamente.");
+      setIsUserAuthenticated(false); // Update local auth state
+      navigate("/login");
+    } catch (error: any) {
+      toast.error(error.message || "Error al cerrar sesión.");
+      console.error("Error en la solicitud de logout:", error);
+      // Optionally, if logout fails due to auth issues, still redirect
+      if (error.message && (error.message.includes("401") || error.message.includes("failed"))) {
+        navigate("/login");
       }
-    } catch (error) {
-      toast.error("Error en la solicitud de logout.");
-      console.log("Error en la solicitud:", error);
     }
   }
 
   const handlestatus = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/login/status`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Incluye cookies en la solicitud
-      });
-
-      if (response.status === 401) {
+      const isAuthenticated = await fetchAuthStatus();
+      if (isAuthenticated) {
+        setIsUserAuthenticated(true);
+        // Para obtener el rol de admin actualizado, podríamos llamar a fetchAdminRole aquí
+        // o confiar en que el estado 'isAdmin' ya está actualizado por los useEffects.
+        // Por simplicidad y para reflejar el estado actual gestionado por useEffects:
+        const currentAdminStatus = isAdmin; // Usamos el estado 'isAdmin' ya gestionado
+        toast.success(`Estado: Autenticado. ${currentAdminStatus ? 'Rol: Admin.' : 'Rol: Usuario.'}`);
+        console.log("Estado:", { isAuthenticated, isAdmin: currentAdminStatus });
+        // Si quisieras forzar una re-verificación del rol de admin aquí:
+        // const isAdminRole = await fetchAdminRole();
+        // setIsAdmin(isAdminRole);
+        // toast.success(`Estado: Autenticado. ${isAdminRole ? 'Rol: Admin.' : 'Rol: Usuario.'}`);
+      } else {
+        toast.error("No autenticado. Por favor, inicia sesión.");
+        setIsUserAuthenticated(false);
+        setIsAdmin(false); // Si no está autenticado, no puede ser admin
         navigate("/login"); // Redirige al login si no está autenticado
       }
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log("Estado:", data);
-        toast.success("Estado verificado correctamente.");
-      }
-      
-    } catch (error) {
-      console.error("Error al verificar la autenticación:", error);
-      toast.error("Error al verificar la autenticación.");
+    } catch (error: any) {
+      console.error("Error al verificar el estado:", error);
+      toast.error(error.message || "Error al verificar el estado.");
+      setIsUserAuthenticated(false);
       navigate("/login"); // Redirige al login en caso de error
+      setIsAdmin(false);
     }
   }
 
@@ -113,37 +123,34 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
+    // Fetch admin status only if authenticated.
+    // isLoadingAdminStatus se usa para evitar múltiples llamadas si ya se está cargando o ya se cargó.
+    if (!isUserAuthenticated || !isLoadingAdminStatus) {
+      return;
+    }
+
     const fetchAdminStatus = async () => {
-      setIsLoadingAdminStatus(true);
+      // setIsLoadingAdminStatus(true); // This line is redundant due to the effect's guard condition.
+      // If the effect proceeds, isLoadingAdminStatus is already true.
       try {
-        const response = await fetch(`${API_BASE_URL}/admin/status`, {
-          method: "GET",
-          //headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setIsAdmin(data.isAdmin === true); // Asegurarse que sea booleano
-        } else if (response.status === 401) {
-          // No autenticado, no es admin
-          setIsAdmin(false);
-          // Podrías redirigir al login aquí si es necesario, o manejarlo en handlestatus
-        } else {
-          // Otro error, asumir que no es admin
-          setIsAdmin(false);
-          toast.error("No se pudo verificar el estado de administrador.");
-        }
-      } catch (error) {
+        // This check is only truly necessary if fetchAuthStatus doesn't return isAdmin
+        // or if you need to re-verify admin status independently.
+        const isAdminUser = await fetchAdminRole();
+        setIsAdmin(isAdminUser);
+      } catch (error: any) {
         console.error("Error fetching admin status:", error);
         setIsAdmin(false); // Asumir no admin en caso de error de red
-        toast.error("Error de red al verificar estado de administrador.");
+        toast.error(error.message || "Error al verificar estado de administrador.");
+        if (error.message && error.message.includes("401")) {
+          setIsUserAuthenticated(false); // Si obtener el rol de admin da 401, el usuario ya no está autenticado
+          navigate("/login"); // If fetching admin status results in 401, user is no longer auth
+        }
       } finally {
         setIsLoadingAdminStatus(false);
       }
     };
-
     fetchAdminStatus();
-  }, []); // Se ejecuta una vez al montar el componente
+  }, [isUserAuthenticated, isLoadingAdminStatus, navigate]);
 
   const handleViewNews = async () => {
     setIsCheckingConnection(true);
@@ -172,23 +179,15 @@ const Dashboard = () => {
   };
   
   const fetchUsers = async () => {
-    if (!isAdmin) return; // Usar el estado isAdmin
+    if (!isAdmin) return;
     setIsLoadingUsers(true);
     try {
-      // Asume que tienes un endpoint /api/users para obtener la lista de usuarios
-      const response = await fetch(`${API_BASE_URL}/users`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error(`Error al obtener usuarios: ${response.statusText}`);
-      }
-      const data = await response.json();
-      setUsers(data.users || data); // Ajusta según la estructura de tu respuesta API
-    } catch (error) {
+      const fetchedUsers = await fetchAllUsers();
+      setUsers(fetchedUsers);
+    } catch (error: any) {
       console.error("Error fetching users:", error);
-      toast.error((error as Error).message || "No se pudieron cargar los usuarios.");
+      toast.error(error.message || "No se pudieron cargar los usuarios.");
+      if (error.message && error.message.includes("401")) navigate("/login");
       setUsers([]); // Limpiar usuarios en caso de error
     } finally {
       setIsLoadingUsers(false);
@@ -196,7 +195,7 @@ const Dashboard = () => {
   };
 
   const handleOpenUsersModal = () => {
-    if (isAdmin) { // Usar el estado isAdmin
+    if (isAdmin) {
       setIsUsersModalOpen(true);
       fetchUsers(); // Cargar usuarios cuando se abre el modal
     } else {
@@ -209,20 +208,13 @@ const Dashboard = () => {
       return;
     }
     try {
-      // Asume que tienes un endpoint DELETE /api/users/:userId
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: response.statusText }));
-        throw new Error(errorData.message || `Error al eliminar usuario: ${response.statusText}`);
-      }
+      await deleteUserById(userId);
       toast.success(`Usuario ${name} eliminado correctamente.`);
       setUsers(prevUsers => prevUsers.filter(user => user.id !== userId)); // Actualizar UI
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting user:", error);
-      toast.error((error as Error).message || "No se pudo eliminar el usuario.");
+      toast.error(error.message || "No se pudo eliminar el usuario.");
+      if (error.message && error.message.includes("401")) navigate("/login");
     }
   };
 
@@ -231,24 +223,16 @@ const Dashboard = () => {
     setIsLoadingCurrentUserDetails(true);
     setIsUpdateUserModalOpen(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${user.id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: `Error ${response.status} al cargar datos del usuario.` }));
-        throw new Error(errorData.message);
-      }
-      const userData: User = await response.json();
+      const userData = await fetchUserDetailsById(user.id);
       setUpdateUserFormData({
         name: userData.name,
         email: userData.email,
         role: userData.role, 
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching user details for update:", error);
-      toast.error((error as Error).message || "No se pudieron cargar los detalles del usuario.");
+      toast.error(error.message || "No se pudieron cargar los detalles del usuario.");
+      if (error.message && error.message.includes("401")) navigate("/login");
       // Considerar cerrar el modal si la carga falla críticamente
       // setIsUpdateUserModalOpen(false); 
       // setCurrentUserToUpdate(null);
@@ -282,46 +266,33 @@ const Dashboard = () => {
 
     setIsSubmittingUpdate(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${currentUserToUpdate.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ // Asegúrate de enviar todos los campos necesarios
-          name: updateUserFormData.name,
-          email: updateUserFormData.email,
-          role: updateUserFormData.role,
-        }),
-      });
-
-      if (!response.ok) {
-        // Intenta obtener un mensaje de error más específico del backend
-        let errorMessage = "Ocurrió un error al actualizar el usuario.";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || (errorData.errors && errorData.errors[0]?.msg) || errorMessage;
-        } catch (e) {
-          // No se pudo parsear JSON, usar statusText
-          errorMessage = response.statusText || errorMessage;
-        }
-        toast.error(errorMessage);
-        throw new Error(errorMessage); // Para que no continúe al success
-      }
-
-      // const updatedUser = await response.json(); // Opcional, si el backend devuelve el usuario actualizado
+      const updatedUserData = {
+        name: updateUserFormData.name,
+        email: updateUserFormData.email,
+        role: updateUserFormData.role,
+      };
+      await updateUserById(currentUserToUpdate.id, updatedUserData);
       toast.success("Usuario actualizado correctamente");
       setIsUpdateUserModalOpen(false);
       fetchUsers(); // Refrescar la lista de usuarios
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating user:", error);
-      // El toast de error ya se mostró si vino del !response.ok
-      // Si es un error de red, se mostrará el genérico "Ocurrio un error" si no se especificó antes.
-      if (!(error instanceof Error && toast.error.name === 'Error')) { // Evitar doble toast si ya se mostró uno específico
-         // toast.error("Ocurrió un error al actualizar el usuario."); // Ya cubierto por el bloque !response.ok
-      }
+      toast.error(error.message || "Ocurrió un error al actualizar el usuario.");
+      if (error.message && error.message.includes("401")) navigate("/login");
     } finally {
       setIsSubmittingUpdate(false);
     }
   };
+
+  if (isInitialAuthLoading) {
+    return <div className="flex justify-center items-center min-h-screen"><Loader2 className="h-12 w-12 animate-spin text-blue-600" /> <p className="ml-4 text-lg">Verificando autenticación...</p></div>;
+  }
+
+  if (!isUserAuthenticated) {
+    // This case should ideally be handled by the redirect in the initial useEffect,
+    // but as a fallback or if navigation is slow:
+    return <div className="flex justify-center items-center min-h-screen"><p className="text-lg text-gray-700 dark:text-gray-300">No autenticado. Redirigiendo al login...</p></div>;
+  }
 
     return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
