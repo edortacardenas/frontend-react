@@ -1,6 +1,4 @@
-import { useState, 
-  //useEffect 
-} from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +16,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"; // Shadcn Form components
-//import { fetchAuthStatus } from "../../../lib/helpers"; // Ajusta la ruta si es necesario
-//import { Loader2 } from "lucide-react"; // O tu componente Spinner preferido
 
 // Zod Schema for password validation
 const changePasswordSchema = z.object({
@@ -36,8 +32,6 @@ type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
 const Config = () => {
   const navigate = useNavigate()
-  //const [isAuthChecking, setIsAuthChecking] = useState(true);
-  //const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const [profileFormData, setProfileFormData] = useState({
     name: "",
@@ -46,46 +40,6 @@ const Config = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"update" | "delete">("update");
-
-  /*useEffect(() => {
-    const checkAuthentication = async () => {
-      setIsAuthChecking(true);
-      try {
-        const isAuthenticated = await fetchAuthStatus();
-        if (isAuthenticated) {
-          setIsUserAuthenticated(true);
-        } else {
-          toast.error("Acceso denegado. Debes iniciar sesión.");
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error("Error al verificar autenticación en Config:", error);
-        toast.error("Error al verificar tu sesión. Por favor, intenta iniciar sesión de nuevo.");
-        navigate("/login");
-      } finally {
-        setIsAuthChecking(false);
-      }
-    };
-    checkAuthentication();
-  }, []);
-  
-
-  
-  if (isAuthChecking) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-        <p className="ml-4 text-lg">Verificando acceso...</p>
-      </div>
-    );
-  }
-
-  if (!isUserAuthenticated) {
-    // Aunque el useEffect ya redirige, esto es una guarda adicional
-    // o para el caso en que la navegación aún no haya completado.
-    return null; 
-  }
-  */
 
   // Cargar datos del perfil al abrir el modal de actualización
   const loadProfileData = async () => {

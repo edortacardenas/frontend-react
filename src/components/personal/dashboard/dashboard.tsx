@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input"; // Para los campos del formulario
 import { Label } from "@/components/ui/label"; // Para las etiquetas del formulario
 import { Checkbox } from "@/components/ui/checkbox"; // Para el campo isAdmin
 import {
-  fetchAuthStatus,
   logoutUser,
   fetchAdminRole, // You might not need this if fetchAuthStatus provides isAdmin
   fetchAllUsers,
@@ -33,8 +32,6 @@ import {
 
 const Dashboard = () => {
   const navigate = useNavigate(); // Hook para redirigir
-  const [isInitialAuthLoading, setIsInitialAuthLoading] = useState(true);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [isCheckingConnection, setIsCheckingConnection] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -47,36 +44,12 @@ const Dashboard = () => {
   const [isLoadingCurrentUserDetails, setIsLoadingCurrentUserDetails] = useState(false);
   const [isSubmittingUpdate, setIsSubmittingUpdate] = useState(false);
 
-  // Initial authentication check
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      setIsInitialAuthLoading(true);
-      try {
-        // Asumimos que fetchAuthStatus() devuelve: Promise<boolean>
-        const isAuthenticated = await fetchAuthStatus();
-        if (isAuthenticated) {
-          setIsUserAuthenticated(true);
-          // El rol de admin se obtendrá en el siguiente useEffect
-        } else {
-          toast.error("Acceso denegado. Por favor, inicia sesión.");
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error("Error checking authentication status for dashboard:", error);
-        toast.error("Error al verificar autenticación. Redirigiendo al login.");
-        navigate("/login");
-      } finally {
-        setIsInitialAuthLoading(false);
-      }
-    };
-    checkAuthentication();
-  }, [navigate]);
-
   const handlelogout = async () => {
     try {
       await logoutUser();
       toast.success("Sesión cerrada exitosamente.");
-      setIsUserAuthenticated(false); // Update local auth state
+      // Ya no es necesario gestionar isUserAuthenticated localmente aquí
+      // ProtectedRoute se encargará de la redirección si se intenta acceder de nuevo.
       navigate("/login");
     } catch (error: any) {
       toast.error(error.message || "Error al cerrar sesión.");
@@ -92,8 +65,8 @@ const Dashboard = () => {
   
   useEffect(() => {
     // Fetch admin status only if authenticated.
-    // isLoadingAdminStatus se usa para evitar múltiples llamadas si ya se está cargando o ya se cargó.
-    if (!isUserAuthenticated || !isLoadingAdminStatus) {
+    // Como ProtectedRoute asegura la autenticación, solo necesitamos verificar isLoadingAdminStatus.
+    if (!isLoadingAdminStatus) {
       return;
     }
 
@@ -109,16 +82,18 @@ const Dashboard = () => {
         console.error("Error fetching admin status:", error);
         setIsAdmin(false); // Asumir no admin en caso de error de red
         toast.error(error.message || "Error al verificar estado de administrador.");
+        // Si obtener el rol de admin da 401, el token podría haber expirado o ser inválido.
+        // ProtectedRoute debería eventualmente capturar esto en una nueva navegación,
+        // pero una redirección aquí puede ser proactiva.
         if (error.message && error.message.includes("401")) {
-          setIsUserAuthenticated(false); // Si obtener el rol de admin da 401, el usuario ya no está autenticado
-          navigate("/login"); // If fetching admin status results in 401, user is no longer auth
+          navigate("/login");
         }
       } finally {
         setIsLoadingAdminStatus(false);
       }
     };
     fetchAdminStatus();
-  }, [isUserAuthenticated, isLoadingAdminStatus, navigate]);
+  }, [isLoadingAdminStatus, navigate]); // isUserAuthenticated eliminado de las dependencias
 
   const handleViewNews = async () => {
     setIsCheckingConnection(true);
@@ -251,16 +226,6 @@ const Dashboard = () => {
       setIsSubmittingUpdate(false);
     }
   };
-
-  if (isInitialAuthLoading) {
-    return <div className="flex justify-center items-center min-h-screen"><Loader2 className="h-12 w-12 animate-spin text-blue-600" /> <p className="ml-4 text-lg">Verificando autenticación...</p></div>;
-  }
-
-  if (!isUserAuthenticated) {
-    // This case should ideally be handled by the redirect in the initial useEffect,
-    // but as a fallback or if navigation is slow:
-    return <div className="flex justify-center items-center min-h-screen"><p className="text-lg text-gray-700 dark:text-gray-300">No autenticado. Redirigiendo al login...</p></div>;
-  }
 
     return (
       <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
