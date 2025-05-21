@@ -30,9 +30,8 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8 bg-contain bg-no-repeat bg-center" 
-    style={{ backgroundImage: "url('/noticias-home.jpg')" }}
-      >
+      {/* Fondo para móviles: textura1.jpg cubriendo el área. Fondo para md y superiores: noticias-home.jpg contenido. */}
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
         <div className="max-w-4xl w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 md:p-12" style={{ background:"transparent" }}>
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
