@@ -252,7 +252,7 @@ const Config = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-cover md:bg-no-repeat md:bg-center">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Configuración de Perfil</h2>
         <div className="space-y-4">
