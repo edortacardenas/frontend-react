@@ -65,7 +65,7 @@ const Config = () => {
       }
     };
     checkAuthentication();
-  }, [navigate]);
+  }, []);
 
   if (isAuthChecking) {
     return (
