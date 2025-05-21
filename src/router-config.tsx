@@ -1,6 +1,6 @@
 //Importamos desde pages q es el q esta haciendo el lazy load
 
-import { ForgotPassword, Home, Login, Register, ResetPassword, VerifyEmail, Noticias, ProtectedRoutes} from "./pages"
+import { ForgotPassword, Home, Login, Register, ResetPassword, VerifyEmail, Noticias} from "./pages"
 
 export const routes = [
     {
@@ -32,13 +32,6 @@ export const routes = [
         path: "/verify-email",
         element: <VerifyEmail/>
     },
-    {
-        path:"/dashboard",
-        element: <ProtectedRoutes/>
-    },
-    {
-        path:"/config",
-        element: <ProtectedRoutes/>
-    },
+    
 ]
     
