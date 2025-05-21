@@ -30,7 +30,6 @@ import {
   User, // Import from helpers
   UpdateUserFormData // Import from helpers
 } from "../../../lib/helpers";
-import { Config } from '@/pages';
 
 const Dashboard = () => {
   const navigate = useNavigate(); // Hook para redirigir
@@ -263,11 +262,6 @@ const Dashboard = () => {
     return <div className="flex justify-center items-center min-h-screen"><p className="text-lg text-gray-700 dark:text-gray-300">No autenticado. Redirigiendo al login...</p></div>;
   }
 
-  const handleNavegateConfig = () => {
-    return <Config/>
-  };
-
-
     return (
       <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
       <div className="max-w-7xl mx-auto">
@@ -350,7 +344,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <p className="font-bold text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
-              <Button variant="ghost" className="mt-4 w-full" onClick={() => handleNavegateConfig}>
+              <Button variant="ghost" className="mt-4 w-full" onClick={() => navigate("/config")}>
                 Configurar
               </Button>
             </CardContent>
