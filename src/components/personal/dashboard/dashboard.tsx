@@ -263,7 +263,7 @@ const Dashboard = () => {
   }
 
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
