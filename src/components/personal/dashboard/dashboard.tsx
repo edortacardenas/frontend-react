@@ -89,10 +89,7 @@ const Dashboard = () => {
   }
 
   
-  const handlehome = () => {
-    navigate("/");
-  }
-
+  
   useEffect(() => {
     // Fetch admin status only if authenticated.
     // isLoadingAdminStatus se usa para evitar múltiples llamadas si ya se está cargando o ya se cargó.
@@ -266,7 +263,7 @@ const Dashboard = () => {
   }
 
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/dashboard.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
@@ -278,8 +275,8 @@ const Dashboard = () => {
             </div>
             {/* Sección de botones: fila centrada en móvil, alineada a la derecha en md+ */}
             <div className="flex flex-row items-center justify-center md:justify-end space-x-2 md:space-x-3">
-              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg bg-blue-200" size="lg" onClick={handlehome}>
-              <Link to="/home">Dashboard</Link>
+              <Button asChild variant="ghost" className=" bg-blue-200" >
+              <Link to="/">Home</Link>
               </Button>
               <Button variant="destructive" onClick={handlelogout}>
                   Logout
