@@ -34,8 +34,8 @@ type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
 const Config = () => {
   const navigate = useNavigate()
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  //const [isAuthChecking, setIsAuthChecking] = useState(true);
+  //const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const [profileFormData, setProfileFormData] = useState({
     name: "",
@@ -66,8 +66,9 @@ const Config = () => {
     };
     checkAuthentication();
   }, []);
-  */
+  
 
+  
   if (isAuthChecking) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -82,6 +83,7 @@ const Config = () => {
     // o para el caso en que la navegación aún no haya completado.
     return null; 
   }
+  */
 
   // Cargar datos del perfil al abrir el modal de actualización
   const loadProfileData = async () => {
