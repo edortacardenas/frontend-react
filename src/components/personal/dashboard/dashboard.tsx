@@ -344,8 +344,8 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <p className="font-bold text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
-              <Button variant="ghost" className="mt-4 w-full" onClick={() => navigate("/config")}>
-                Configurar
+              <Button variant="ghost" className="mt-4 w-full" >
+                <Link to="/config">Configuración</Link>
               </Button>
             </CardContent>
           </Card>
