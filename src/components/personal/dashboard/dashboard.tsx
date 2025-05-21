@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { checkNewsApiConnectionFetch } from "../../../services/newsService"; // Asegúrate que la ruta sea correcta
 import { Loader2, Trash2, Edit3, UserCog, Users, Save } from "lucide-react";
 import {
@@ -266,7 +266,7 @@ const Dashboard = () => {
   }
 
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/dashboard.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
@@ -274,12 +274,12 @@ const Dashboard = () => {
             {/* Sección de título y subtítulo: centrado en móvil, alineado a la izquierda en md+ */}
             <div className="text-center md:text-left mb-4 md:mb-0">
               <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300">Bienvenido a tu panel de control</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-300">Bienvenido a tu panel de control</p>
             </div>
             {/* Sección de botones: fila centrada en móvil, alineada a la derecha en md+ */}
             <div className="flex flex-row items-center justify-center md:justify-end space-x-2 md:space-x-3">
-              <Button variant="outline" onClick={handlehome}>
-                  Home
+              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg bg-blue-200" size="lg" onClick={handlehome}>
+              <Link to="/home">Dashboard</Link>
               </Button>
               <Button variant="destructive" onClick={handlelogout}>
                   Logout
@@ -292,15 +292,15 @@ const Dashboard = () => {
           {/* Card 1 */}
           {
             isAdmin && (
-            <Card className="shadow-lg">
+            <Card className="shadow-lg" style={{background:"transparent"}}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-lg font-semibold">
+                <CardTitle className="text-lg font-bold">
                   Usuarios
                 </CardTitle>
                 <Users className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <p className="text-gray-900">Administra los usuarios registrados.</p>
+                <p className="font-bold text-gray-900">Administra los usuarios registrados.</p>
                 <Button 
                   variant="ghost" 
                   className="mt-4 w-full" 
@@ -318,15 +318,15 @@ const Dashboard = () => {
           
 
           {/* Card 2 */}
-          <Card className="shadow-lg">
+          <Card className="shadow-lg" style={{background:"transparent"}}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-semibold">
+              <CardTitle className="text-lg font-bold">
                 Noticias
               </CardTitle>
               <UserCog className="h-5 w-5 text-muted-foreground" /> {/* Icono placeholder */}
             </CardHeader>
             <CardContent>
-              <p className="text-gray-900">Consulta las noticias de ultimo momento.</p>
+              <p className="font-bold text-gray-900">Consulta las noticias de ultimo momento.</p>
               <Button variant="ghost" className="mt-4 w-full" onClick={handleViewNews} disabled={isCheckingConnection}>
                 {isCheckingConnection ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Verificando...</>
@@ -338,15 +338,15 @@ const Dashboard = () => {
           </Card>
 
           {/* Card 3 */}
-          <Card className="shadow-lg">
+          <Card className="shadow-lg" style={{background:"transparent"}}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-semibold">
+              <CardTitle className="text-lg font-bold">
                 Configuración
               </CardTitle>
               <UserCog className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <p className="text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
+              <p className="font-bold text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
               <Button variant="ghost" className="mt-4 w-full" onClick={() => navigate("/config")}>
                 Configurar
               </Button>

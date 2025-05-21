@@ -162,7 +162,7 @@ const LoginForm = () => {
             <Lock className="h-6 w-6" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">Iniciar sesión</h2>
-          <p className="mt-2 text-sm text-black dark:text-gray-400 font-bold">
+          <p className="mt-2 text-sm text-gray-900 dark:text-gray-400 font-bold">
             Ingresa tus credenciales para acceder a tu cuenta
           </p>
         </div>
@@ -219,7 +219,7 @@ const LoginForm = () => {
                 </a>
               </div>
             </div>
-            <Button type="submit" className="w-full font-bold text-gray-900 dark:text-white" variant="ghost" disabled={isLoading}>
+            <Button type="submit" className="w-full " disabled={isLoading}>
               {isLoading ? <Spinner/> : "Iniciar sesión"}
             </Button>
           </form>

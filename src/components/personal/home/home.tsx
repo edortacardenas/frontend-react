@@ -37,7 +37,7 @@ const Home = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
               Bienvenido a Nuestra Plataforma
             </h1>
-            <p className="text-gray-800 dark:text-white text-lg md:text-xl mb-8">
+            <p className="font-semibold text-gray-800 dark:text-white text-lg md:text-xl mb-8">
               Somos una empresa dedicada a ofrecer soluciones innovadoras para tus necesidades.
               Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros clientes.
             </p>
@@ -47,15 +47,15 @@ const Home = () => {
             {isLoadingAuthStatus ? (
               <Spinner /> // Ajusta el tamaño y color según tu spinner
             ) : isAuthenticated ? (
-              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg" size="lg">
+              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg bg-blue-200" size="lg">
                 <Link to="/dashboard">Dashboard</Link>
               </Button>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <Button asChild variant="ghost" className="w-full py-3 text-lg" size="lg">
+                <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button asChild variant="ghost" className="w-full py-3 text-lg" size="lg">
+                <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
                   <Link to="/register">Registro</Link>
                 </Button>
               </div>
@@ -73,7 +73,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Innovación</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Utilizamos tecnología de punta para ofrecerte las mejores soluciones.
                 </p>
               </div>
@@ -88,7 +88,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Calidad</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Nos esforzamos por ofrecer productos y servicios de la más alta calidad.
                 </p>
               </div>
@@ -105,7 +105,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Soporte 24/7</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Nuestro equipo de soporte está disponible para ayudarte en cualquier momento.
                 </p>
               </div>
@@ -120,7 +120,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Seguridad Avanzada</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Protegemos tus datos con los más altos estándares de seguridad.
                 </p>
               </div>
@@ -135,7 +135,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Integración Fácil</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Conéctate sin problemas con tus herramientas y servicios existentes.
                 </p>
               </div>
@@ -150,7 +150,7 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Escalabilidad</h3>
-                <p className="text-gray-900 dark:text-gray-400 mt-1">
+                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
                   Nuestra plataforma crece contigo, adaptándose a tus necesidades futuras.
                 </p>
               </div>

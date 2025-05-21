@@ -143,17 +143,17 @@ import { toast } from "react-hot-toast";
 
   return (
     <>
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 dark:bg-gray-900">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-    <Card className="w-full shadow-lg">
+    <Card className="w-full shadow-lg" style={{background:"transparent"}}>
       <CardHeader className="space-y-1">
         <div className="w-full max-w-md mx-auto">
           <div className="bg-primary text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
             <User className="h-6 w-6" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">Registro de cuenta</h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm text-gray-900 dark:text-gray-400 font-bold">
             Rellena los campos para crear tu cuenta
           </p>
         </div>
@@ -232,19 +232,14 @@ import { toast } from "react-hot-toast";
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+      <div className="relative flex justify-center text-xs uppercase">
+            <h2 className="font-bold text-gray-900 dark:text-white">O regístrate con</h2>
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">O regístrate con</span>
-          </div>
-        </div>
         {/**Social Buttons */}
         <Social/>
-        <div className="text-center text-sm mt-4">
+        <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/login" className="font-medium text-primary hover:text-primary/80">
+          <a href="/login" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
             Iniciar sesión
           </a>
         </div>
