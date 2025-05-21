@@ -88,36 +88,7 @@ const Dashboard = () => {
     }
   }
 
-  const handlestatus = async () => {
-    try {
-      const isAuthenticated = await fetchAuthStatus();
-      if (isAuthenticated) {
-        setIsUserAuthenticated(true);
-        // Para obtener el rol de admin actualizado, podríamos llamar a fetchAdminRole aquí
-        // o confiar en que el estado 'isAdmin' ya está actualizado por los useEffects.
-        // Por simplicidad y para reflejar el estado actual gestionado por useEffects:
-        const currentAdminStatus = isAdmin; // Usamos el estado 'isAdmin' ya gestionado
-        toast.success(`Estado: Autenticado. ${currentAdminStatus ? 'Rol: Admin.' : 'Rol: Usuario.'}`);
-        console.log("Estado:", { isAuthenticated, isAdmin: currentAdminStatus });
-        // Si quisieras forzar una re-verificación del rol de admin aquí:
-        // const isAdminRole = await fetchAdminRole();
-        // setIsAdmin(isAdminRole);
-        // toast.success(`Estado: Autenticado. ${isAdminRole ? 'Rol: Admin.' : 'Rol: Usuario.'}`);
-      } else {
-        toast.error("No autenticado. Por favor, inicia sesión.");
-        setIsUserAuthenticated(false);
-        setIsAdmin(false); // Si no está autenticado, no puede ser admin
-        navigate("/login"); // Redirige al login si no está autenticado
-      }
-    } catch (error: any) {
-      console.error("Error al verificar el estado:", error);
-      toast.error(error.message || "Error al verificar el estado.");
-      setIsUserAuthenticated(false);
-      navigate("/login"); // Redirige al login en caso de error
-      setIsAdmin(false);
-    }
-  }
-
+  
   const handlehome = () => {
     navigate("/");
   }
@@ -295,7 +266,9 @@ const Dashboard = () => {
   }
 
     return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8 bg-contain bg-no-repeat bg-center" 
+      style={{ backgroundImage: "url('/noticias-home.jpg')" }}
+        >
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
@@ -309,9 +282,6 @@ const Dashboard = () => {
             <div className="flex flex-row items-center justify-center md:justify-end space-x-2 md:space-x-3">
               <Button variant="outline" onClick={handlehome}>
                   Home
-              </Button>
-              <Button variant="outline" onClick={handlestatus}>
-                  Status
               </Button>
               <Button variant="destructive" onClick={handlelogout}>
                   Logout
@@ -332,9 +302,9 @@ const Dashboard = () => {
                 <Users className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Administra los usuarios registrados.</p>
+                <p className="text-gray-900">Administra los usuarios registrados.</p>
                 <Button 
-                  variant="default" 
+                  variant="ghost" 
                   className="mt-4 w-full" 
                   onClick={handleOpenUsersModal}
                   disabled={!isAdmin || isLoadingAdminStatus}
@@ -358,8 +328,8 @@ const Dashboard = () => {
               <UserCog className="h-5 w-5 text-muted-foreground" /> {/* Icono placeholder */}
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Consulta las noticias de ultimo momento.</p>
-              <Button variant="default" className="mt-4 w-full" onClick={handleViewNews} disabled={isCheckingConnection}>
+              <p className="text-gray-900">Consulta las noticias de ultimo momento.</p>
+              <Button variant="ghost" className="mt-4 w-full" onClick={handleViewNews} disabled={isCheckingConnection}>
                 {isCheckingConnection ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Verificando...</>
                 ) : (
@@ -378,8 +348,8 @@ const Dashboard = () => {
               <UserCog className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Personaliza las configuraciones de tu cuenta.</p>
-              <Button variant="default" className="mt-4 w-full" onClick={() => navigate("/config")}>
+              <p className="text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
+              <Button variant="ghost" className="mt-4 w-full" onClick={() => navigate("/config")}>
                 Configurar
               </Button>
             </CardContent>

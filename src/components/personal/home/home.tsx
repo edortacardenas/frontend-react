@@ -30,13 +30,15 @@ const Home = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
-        <div className="max-w-4xl w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 md:p-12">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8 bg-contain bg-no-repeat bg-center" 
+    style={{ backgroundImage: "url('/noticias-home.jpg')" }}
+      >
+        <div className="max-w-4xl w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 md:p-12" style={{ background:"transparent" }}>
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
               Bienvenido a Nuestra Plataforma
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl mb-8">
+            <p className="text-gray-800 dark:text-white text-lg md:text-xl mb-8">
               Somos una empresa dedicada a ofrecer soluciones innovadoras para tus necesidades.
               Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros clientes.
             </p>
@@ -46,15 +48,15 @@ const Home = () => {
             {isLoadingAuthStatus ? (
               <Spinner /> // Ajusta el tamaño y color según tu spinner
             ) : isAuthenticated ? (
-              <Button asChild variant="default" className="w-2/5 py-3 text-lg" size="lg">
+              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg" size="lg">
                 <Link to="/dashboard">Dashboard</Link>
               </Button>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <Button asChild variant="default" className="w-full py-3 text-lg" size="lg">
+                <Button asChild variant="ghost" className="w-full py-3 text-lg" size="lg">
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button asChild variant="default" className="w-full py-3 text-lg" size="lg">
+                <Button asChild variant="ghost" className="w-full py-3 text-lg" size="lg">
                   <Link to="/register">Registro</Link>
                 </Button>
               </div>
@@ -63,7 +65,7 @@ const Home = () => {
 
           {/* Sección de Características (mantenida como en el ejemplo anterior) */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-blue-500 text-white p-3 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -71,14 +73,14 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Innovación</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Innovación</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Utilizamos tecnología de punta para ofrecerte las mejores soluciones.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-green-500 text-white p-3 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697A9.009 9.009 0 003 12c0 1.63.425 3.166 1.198 4.5H3a1 1 0 00-1 1v3a1 1 0 001 1h3.5M21 12a8.962 8.962 0 00-2.035-5.632M17.5 19H21a1 1 0 001-1v-3a1 1 0 00-1-1h-1.802A9.008 9.008 0 0015 3.5" />
@@ -86,8 +88,8 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Calidad</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Calidad</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Nos esforzamos por ofrecer productos y servicios de la más alta calidad.
                 </p>
               </div>
@@ -95,7 +97,7 @@ const Home = () => {
              {/* Puedes añadir más características aquí si lo deseas */}
              
             {/* Nuevas Características */}
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-purple-500 text-white p-3 rounded-full">
                 {/* Icono de Soporte 24/7 */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -103,14 +105,14 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Soporte 24/7</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Soporte 24/7</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Nuestro equipo de soporte está disponible para ayudarte en cualquier momento.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-red-500 text-white p-3 rounded-full">
                 {/* Icono de Seguridad Avanzada */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -118,14 +120,14 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Seguridad Avanzada</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Seguridad Avanzada</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Protegemos tus datos con los más altos estándares de seguridad.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-indigo-500 text-white p-3 rounded-full">
                 {/* Icono de Integración Fácil */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -133,14 +135,14 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Integración Fácil</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Integración Fácil</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Conéctate sin problemas con tus herramientas y servicios existentes.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
               <div className="flex-shrink-0 bg-teal-500 text-white p-3 rounded-full">
                 {/* Icono de Escalabilidad */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -148,8 +150,8 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Escalabilidad</h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Escalabilidad</h3>
+                <p className="text-gray-900 dark:text-gray-400 mt-1">
                   Nuestra plataforma crece contigo, adaptándose a tus necesidades futuras.
                 </p>
               </div>
