@@ -71,6 +71,7 @@ const Noticias: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+    <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-slate-50 min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-200">
         <div className="flex items-center mb-4 sm:mb-0">
           <Newspaper className="h-10 w-10 text-blue-600 mr-3" />
@@ -147,6 +148,7 @@ const Noticias: React.FC = () => {
       {!hasMoreNews && articles.length > 0 && (
         <p className="text-center text-slate-500 mt-10 py-4 bg-slate-100 rounded-md">No hay más noticias para mostrar.</p>
       )}
+    </div>
     </div>
   );
 };
