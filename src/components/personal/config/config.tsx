@@ -45,7 +45,7 @@ const Config = () => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"update" | "delete">("update");
 
-  useEffect(() => {
+  /*useEffect(() => {
     const checkAuthentication = async () => {
       setIsAuthChecking(true);
       try {
@@ -66,6 +66,7 @@ const Config = () => {
     };
     checkAuthentication();
   }, []);
+  */
 
   if (isAuthChecking) {
     return (
