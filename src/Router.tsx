@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import { routes } from "./router-config"
 import ProtectedRoutes from "./components/auth/protected-routes/protected-routes"
-import { Dashboard, Config} from "../src/pages"
+import { Dashboard, Config, Noticias} from "../src/pages"
 
 
 export const AppRouter = () => {
@@ -16,6 +16,7 @@ export const AppRouter = () => {
         <Route element={<ProtectedRoutes />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/config" element={<Config />} />
+            <Route path="/noticias" element={<Noticias />} />
             {/* Puedes añadir más rutas protegidas aquí */}
           </Route>
       </Routes>

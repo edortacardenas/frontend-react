@@ -11,4 +11,3 @@ export const ForgotPassword = React.lazy(() => import("../components/auth/forgot
 export const ResetPassword = React.lazy(() => import("../components/auth/reset-password/reset-password"));
 export const Noticias = React.lazy(() => import("../components/social/noticias"));
 export const VerifyEmail = React.lazy(() => import("../components/auth/verify-email/verify-email"));
-//export const ProtectedRoutes = React.lazy(() => import("../components/auth/protected-routes/protected-routes"));
