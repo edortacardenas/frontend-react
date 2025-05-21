@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, 
+  //useEffect 
+} from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,8 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"; // Shadcn Form components
-import { fetchAuthStatus } from "../../../lib/helpers"; // Ajusta la ruta si es necesario
-import { Loader2 } from "lucide-react"; // O tu componente Spinner preferido
+//import { fetchAuthStatus } from "../../../lib/helpers"; // Ajusta la ruta si es necesario
+//import { Loader2 } from "lucide-react"; // O tu componente Spinner preferido
 
 // Zod Schema for password validation
 const changePasswordSchema = z.object({
