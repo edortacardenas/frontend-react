@@ -143,7 +143,7 @@ import { toast } from "react-hot-toast";
 
   return (
     <>
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.jpg')] bg-cover bg-center bg-no-repeat">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
     <Card className="w-full shadow-lg" style={{background:"transparent"}}>
