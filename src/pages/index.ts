@@ -1,10 +1,12 @@
 import Home from "@/components/personal/home/home";
+import Login from "@/components/auth/login/login-form";
+import Register from "@/components/auth/register/register-form";
 import React from "react";
 
-export { Home }
+export { Home, Login, Register }
 
-export const Login = React.lazy(() => import("../components/auth/login/login-form"));
-export const Register = React.lazy(() => import("../components/auth/register/register-form"));
+//export const Login = React.lazy(() => import("../components/auth/login/login-form"));
+//export const Register = React.lazy(() => import("../components/auth/register/register-form"));
 export const Dashboard = React.lazy(() => import("../components/personal/dashboard/dashboard"));
 export const Config = React.lazy(() => import("../components/personal/config/config"));
 export const ForgotPassword = React.lazy(() => import("../components/auth/forgot-password/forgot-password"));
