@@ -43,6 +43,7 @@ const Dashboard = () => {
   const [updateUserFormData, setUpdateUserFormData] = useState<UpdateUserFormData>({ name: "", email: "", role: Role.USER });
   const [isLoadingCurrentUserDetails, setIsLoadingCurrentUserDetails] = useState(false);
   const [isSubmittingUpdate, setIsSubmittingUpdate] = useState(false);
+  const [isPageLoaded, setIsPageLoaded] = useState(false); // Estado para la animación de carga de página
 
   const handlelogout = async () => {
     try {
@@ -94,6 +95,15 @@ const Dashboard = () => {
     };
     fetchAdminStatus();
   }, [isLoadingAdminStatus, navigate]); // isUserAuthenticated eliminado de las dependencias
+
+  useEffect(() => {
+    // Activa la animación de carga de página poco después de que el componente se monte
+    // Esto asegura que el estado inicial (antes de la animación) se renderice primero
+    const animationTimer = setTimeout(() => {
+      setIsPageLoaded(true);
+    }, 50); // Un pequeño retraso puede ayudar a asegurar que la transición sea suave
+    return () => clearTimeout(animationTimer);
+  }, []);
 
   const handleViewNews = async () => {
     setIsCheckingConnection(true);
@@ -229,8 +239,13 @@ const Dashboard = () => {
 
     return (
       <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] md:bg-[url('/noticias-home.jpg')] md:bg-contain md:bg-no-repeat md:bg-center">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-8">
+      {/* Contenedor principal del contenido con animación de entrada */}
+      <div className={`
+        max-w-7xl mx-auto w-full
+        transition-all duration-700 ease-out
+        ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
+      `}>
+        <header className="mb-8"> {/* El encabezado también se animará como parte del contenedor principal */}
           {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             {/* Sección de título y subtítulo: centrado en móvil, alineado a la izquierda en md+ */}
@@ -254,7 +269,10 @@ const Dashboard = () => {
           {/* Card 1 */}
           {
             isAdmin && (
-            <Card className="shadow-lg" style={{background:"transparent"}}>
+              <Card
+              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
+              style={{background:"transparent"}}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg font-bold">
                   Usuarios
@@ -280,7 +298,10 @@ const Dashboard = () => {
           
 
           {/* Card 2 */}
-          <Card className="shadow-lg" style={{background:"transparent"}}>
+          <Card
+              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
+              style={{background:"transparent"}}
+            >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg font-bold">
                 Noticias
@@ -300,7 +321,10 @@ const Dashboard = () => {
           </Card>
 
           {/* Card 3 */}
-          <Card className="shadow-lg" style={{background:"transparent"}}>
+          <Card
+              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
+              style={{background:"transparent"}}
+            >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg font-bold">
                 Configuración

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +40,15 @@ const Config = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"update" | "delete">("update");
+  const [isPageLoaded, setIsPageLoaded] = useState(false); // Estado para la animación de carga de página
+
+  useEffect(() => {
+    // Activa la animación de carga de página poco después de que el componente se monte
+    const animationTimer = setTimeout(() => {
+      setIsPageLoaded(true);
+    }, 50); // Un pequeño retraso para asegurar que la transición sea suave
+    return () => clearTimeout(animationTimer);
+  }, []);
 
   // Cargar datos del perfil al abrir el modal de actualización
   const loadProfileData = async () => {
@@ -212,16 +221,21 @@ const Config = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/textura1.jpg')] bg-cover bg-center md:bg-[url('/noticias-home.jpg')] md:bg-cover md:bg-no-repeat md:bg-center">
-      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+      {/* Contenedor principal con animación de entrada */}
+      <div className={`
+        w-full max-w-md bg-white shadow-xl rounded-lg p-6
+        transition-all duration-700 ease-out
+        ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+      `}>
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Configuración de Perfil</h2>
         <div className="space-y-4">
-          <Button onClick={() => openModal("update")} className="w-full">
+        <Button onClick={() => openModal("update")} className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
             Actualizar Perfil
           </Button>
-          <Button onClick={() => openModal("delete")} variant="destructive" className="w-full">
+          <Button onClick={() => openModal("delete")} variant="destructive" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
             Eliminar Perfil
           </Button>
-          <Button onClick={() => setIsChangePasswordModalOpen(true)} variant="outline" className="w-full">
+          <Button onClick={() => setIsChangePasswordModalOpen(true)} variant="outline" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
             Cambiar contraseña
           </Button>
           <Button  onClick={handleCancelAndRedirect} variant="default" className="w-full">
