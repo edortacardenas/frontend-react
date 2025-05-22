@@ -118,3 +118,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Estilos para una barra de desplazamiento transparente */
+/* Para navegadores WebKit (Chrome, Safari, Edge, Opera) */
+.custom-scrollbar-transparent::-webkit-scrollbar {
+  width: 6px; /* Ancho de la barra de desplazamiento vertical */
+  height: 6px; /* Alto de la barra de desplazamiento horizontal (si aplica) */
+}
+
+.custom-scrollbar-transparent::-webkit-scrollbar-track {
+  background: transparent; /* Hace que la pista de la barra de desplazamiento sea transparente */
+}
+
+.custom-scrollbar-transparent::-webkit-scrollbar-thumb {
+  background: transparent; /* Hace que el "pulgar" (la parte móvil) de la barra de desplazamiento sea transparente */
+  /* Si deseas que el pulgar sea sutilmente visible, podrías usar un color con baja opacidad: */
+  /* background: rgba(0, 0, 0, 0.2); */
+  /* border-radius: 3px; */ /* Opcional: para redondear el pulgar */
+}
+
+/* Para Firefox */
+.custom-scrollbar-transparent {
+  scrollbar-width: thin; /* Hace la barra de desplazamiento más delgada en Firefox */
+  scrollbar-color: transparent transparent; /* color del pulgar, color de la pista */
+  /* Si deseas un pulgar sutilmente visible en Firefox: */
+  /* scrollbar-color: rgba(0, 0, 0, 0.2) transparent; */
+}
