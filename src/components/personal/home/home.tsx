@@ -38,8 +38,8 @@ const Home = () => {
               Bienvenido a Nuestra Plataforma
             </h1>
             <p className="font-semibold text-gray-800 dark:text-white text-lg md:text-xl mb-8">
-              Somos una empresa dedicada a ofrecer soluciones innovadoras para tus necesidades.
-              Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros clientes.
+              Nos especializamos en proveer la información más actual y relevante a nivel global.
+              Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros lectores.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Innovación</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Utilizamos tecnología de punta para ofrecerte las mejores soluciones.
+                  Utilizamos tecnología de punta para ofrecerte las noticias de ultimo momento.
                 </p>
               </div>
             </div>
@@ -87,9 +87,9 @@ const Home = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Calidad</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Lideres</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Nos esforzamos por ofrecer productos y servicios de la más alta calidad.
+                Somos líderes en la difusión de noticias de último momento, conectando al mundo con la información que importa.
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Soporte 24/7</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Nuestro equipo de soporte está disponible para ayudarte en cualquier momento.
+                Nuestro equipo de soporte está disponible para asistirte con cualquier consulta sobre nuestra plataforma de noticias.
                 </p>
               </div>
             </div>
@@ -121,7 +121,7 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Seguridad Avanzada</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Protegemos tus datos con los más altos estándares de seguridad.
+                Protegemos la integridad de nuestra información y la privacidad de nuestros lectores con los más altos estándares de seguridad.
                 </p>
               </div>
             </div>
@@ -136,7 +136,7 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Integración Fácil</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Conéctate sin problemas con tus herramientas y servicios existentes.
+                Integra fácilmente nuestras noticias en tus plataformas y servicios favoritos para mantenerte siempre al día.
                 </p>
               </div>
             </div>
@@ -151,7 +151,7 @@ const Home = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Escalabilidad</h3>
                 <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Nuestra plataforma crece contigo, adaptándose a tus necesidades futuras.
+                Nuestra cobertura informativa se expande y adapta continuamente para satisfacer tu creciente necesidad de estar bien informado.
                 </p>
               </div>
           </div>
