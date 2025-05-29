@@ -220,7 +220,7 @@ const Config = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.jpg')] bg-cover bg-center bg-no-repeat">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
       {/* Contenedor principal con animación de entrada */}
       <div className={`
         w-full max-w-md bg-white shadow-xl rounded-lg p-6

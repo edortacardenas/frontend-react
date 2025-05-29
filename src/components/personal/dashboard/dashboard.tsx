@@ -238,7 +238,7 @@ const Dashboard = () => {
   };
 
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.jpg')] bg-cover bg-center bg-no-repeat">
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
       {/* Contenedor principal del contenido con animación de entrada */}
       <div className={`
         max-w-7xl mx-auto w-full

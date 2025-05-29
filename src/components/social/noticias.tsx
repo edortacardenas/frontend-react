@@ -70,7 +70,7 @@ const Noticias: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.jpg')] bg-cover bg-center bg-no-repeat">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
       <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-transparent dark:bg-slate-800/90 rounded-lg shadow-xl w-full max-w-7xl overflow-y-auto max-h-[calc(100vh-theme(spacing.24))] custom-scrollbar-transparent">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-200 dark:border-slate-700">
           <div className="flex items-center mb-4 sm:mb-0">
