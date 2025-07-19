@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 import { loginSchema } from "../../../lib/zod"
 import Spinner from "../../ui/spinner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Modal from "../../modals/modal";
 import {
@@ -235,9 +235,9 @@ const LoginForm = () => {
         <Social/>
         <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
           ¿No tienes una cuenta?{" "}
-          <a href="/register" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
+          <Link to="/register" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
             Regístrate
-          </a>
+          </Link>
         </div>
       </CardFooter>
     </Card>

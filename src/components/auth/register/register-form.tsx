@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Shadcn Dialog
 import { registerSchema } from "@/lib/zod"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../modals/modal";
 import Social from "../../social/social";
 import Spinner from "../../ui/spinner"; // Importar Spinner
@@ -239,9 +239,9 @@ import { toast } from "react-hot-toast";
         <Social/>
         <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/login" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
+          <Link to="/login" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
             Iniciar sesión
-          </a>
+          </Link>
         </div>
       </CardFooter>
       </Card>
