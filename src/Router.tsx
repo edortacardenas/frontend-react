@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import { routes } from "./router-config"
 import ProtectedRoutes from "./components/auth/protected-routes/protected-routes"
-import { Dashboard, Config, Noticias} from "../src/pages"
+import { Config, Noticias} from "../src/pages"
 
 
 export const AppRouter = () => {
