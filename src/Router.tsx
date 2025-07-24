@@ -14,7 +14,7 @@ export const AppRouter = () => {
         ))}
         {/* Rutas Protegidas */}
         <Route element={<ProtectedRoutes />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/*<Route path="/dashboard" element={<Dashboard />} />*/}
             <Route path="/config" element={<Config />} />
             <Route path="/noticias" element={<Noticias />} />
             {/* Puedes añadir más rutas protegidas aquí */}
