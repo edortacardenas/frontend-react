@@ -24,7 +24,7 @@ import {
   handleResendOtpHelper,
   OnSubmitHelperResult, // Importar el tipo de resultado
 } from "../../../lib/helpers"; // Ajusta la ruta si es necesario
-import Social from "../../social/social"
+//import Social from "../../social/social"
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -227,12 +227,12 @@ const LoginForm = () => {
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         
-          <div className="relative flex justify-center text-xs uppercase ">
+        {/**  <div className="relative flex justify-center text-xs uppercase ">
             <h2 className="font-bold text-gray-900 dark:text-white">O continúa con</h2>
-          </div>
-        
-        {/**Social Buttons */}
-        <Social/>
+         </div>
+        */  }
+        {/** Social Buttons 
+        <Social/> */}
         <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
           ¿No tienes una cuenta?{" "}
           <Link to="/register" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">

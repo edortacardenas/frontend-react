@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { registerSchema } from "@/lib/zod"
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../modals/modal";
-import Social from "../../social/social";
+//import Social from "../../social/social";
 import Spinner from "../../ui/spinner"; // Importar Spinner
 import {
   onRegisterSubmitHelper,
@@ -232,11 +232,12 @@ import { toast } from "react-hot-toast";
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-      <div className="relative flex justify-center text-xs uppercase">
+      {/**<div className="relative flex justify-center text-xs uppercase">
             <h2 className="font-bold text-gray-900 dark:text-white">O regístrate con</h2>
           </div>
         {/**Social Buttons */}
-        <Social/>
+        {/** <Social/> */ }
+        
         <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
           ¿Ya tienes una cuenta?{" "}
           <Link to="/login" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
