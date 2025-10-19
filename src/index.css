@@ -74,6 +74,17 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --catalina-blue-50: 233 100% 97%;
+  --catalina-blue-100: 231 100% 92%;
+  --catalina-blue-200: 231 98% 84%;
+  --catalina-blue-300: 229 98% 76%;
+  --catalina-blue-400: 227 99% 69%;
+  --catalina-blue-500: 221 99% 57%;
+  --catalina-blue-600: 218 95% 44%;
+  --catalina-blue-700: 218 97% 35%;
+  --catalina-blue-800: 219 97% 27%;
+  --catalina-blue-900: 221 98% 17%;
+  --catalina-blue-950: 224 100% 10%;
 }
 
 .dark {

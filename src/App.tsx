@@ -5,7 +5,6 @@ import Spinner from "./components/ui/spinner";
 import { Toaster } from "react-hot-toast";
 
 
-
 function App() {
 
   return (

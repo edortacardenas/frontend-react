@@ -1,9 +1,76 @@
-
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { cubicBezier } from "framer-motion";
+import { Variants } from "framer-motion";
 import { Button } from "@/components/ui/button"; // Asegúrate que la ruta sea correcta
 import { fetchAuthStatus } from "../../../lib/helpers"; // Import the new helper function
 import Spinner from "@/components/ui/spinner"; // Asumiendo que tienes un componente Spinner
+
+const features = [
+  {
+    title: "Innovación",
+    description: "Utilizamos tecnología de punta para ofrecerte las noticias de último momento.",
+    bgColor: "bg-blue-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 16v-2m0-10.039V12m0 4.039V14m5.96-7.96l-1.414 1.414M4.04 15.96l1.414-1.414m0-8.486l-1.414-1.414m12.728 0l-1.414 1.414" />
+      </svg>
+    ),
+  },
+  {
+    title: "Líderes",
+    description: "Somos líderes en la difusión de noticias de último momento, conectando al mundo con la información que importa.",
+    bgColor: "bg-green-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697A9.009 9.009 0 003 12c0 1.63.425 3.166 1.198 4.5H3a1 1 0 00-1 1v3a1 1 0 001 1h3.5M21 12a8.962 8.962 0 00-2.035-5.632M17.5 19H21a1 1 0 001-1v-3a1 1 0 00-1-1h-1.802A9.008 9.008 0 0015 3.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Soporte 24/7",
+    description: "Nuestro equipo de soporte está disponible para asistirte con cualquier consulta sobre nuestra plataforma de noticias.",
+    bgColor: "bg-purple-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Seguridad Avanzada",
+    description: "Protegemos la integridad de nuestra información y la privacidad de nuestros lectores con los más altos estándares de seguridad.",
+    bgColor: "bg-red-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Integración Fácil",
+    description: "Integra fácilmente nuestras noticias en tus plataformas y servicios favoritos para mantenerte siempre al día.",
+    bgColor: "bg-indigo-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Escalabilidad",
+    description: "Nuestra cobertura informativa se expande y adapta continuamente para satisfacer tu creciente necesidad de estar bien informado.",
+    bgColor: "bg-teal-500",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+      </svg>
+    ),
+  },
+];
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,8 +83,6 @@ const Home = () => {
         const authData = await fetchAuthStatus();
         setIsAuthenticated(authData);
       } catch (error) {
-        // Errors (network, unexpected HTTP, parsing) are logged by fetchAuthStatus.
-        // The component ensures the UI reflects an unauthenticated state on any error.
         console.error("Failed to verify authentication status in Home component:", error);
         setIsAuthenticated(false);
       } finally {
@@ -28,138 +93,128 @@ const Home = () => {
     verifyUserAuthentication();
   }, []);
 
+  // Variantes de animación para orquestación
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2, // Aplica un retraso entre la animación de los hijos
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: cubicBezier(0.42, 0, 0.58, 1), // Usar cubicBezier para curvas personalizadas
+      },
+    },
+  };
+
+  const cardVariants: Variants = {
+    offscreen: {
+      y: 50,
+      opacity: 0,
+    },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring", // Asegúrate de que este valor sea válido
+        bounce: 0.4,
+        duration: 0.8,
+      },
+    },
+  };
+
+
   return (
     <>
-      {/* Fondo para móviles: textura1.jpg cubriendo el área. Fondo para md y superiores: noticias-home.webp contenido. */}
       <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
-        <div className="max-w-4xl w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 md:p-12" style={{ background:"transparent" }}>
+        <motion.div
+          className="max-w-4xl w-full bg-white/10 dark:bg-gray-800/20 shadow-xl rounded-lg p-8 md:p-12 backdrop-blur-sm"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+            <motion.h1
+              className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6"
+              variants={itemVariants}
+            >
               Bienvenido a Nuestra Plataforma
-            </h1>
-            <p className="font-semibold text-gray-800 dark:text-white text-lg md:text-xl mb-8">
+            </motion.h1>
+            <motion.p
+              className="font-semibold text-gray-800 dark:text-white text-lg md:text-xl mb-8"
+              variants={itemVariants}
+            >
               Nos especializamos en proveer la información más actual y relevante a nivel global.
               Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros lectores.
-            </p>
+            </motion.p>
           </div>
 
-          <div className="mt-10 mb-12 h-16 flex items-center justify-center"> {/* Contenedor para botones o spinner */}
+          <motion.div
+            className="mt-10 mb-12 h-16 flex items-center justify-center"
+            variants={itemVariants}
+          >
             {isLoadingAuthStatus ? (
-              <Spinner /> // Ajusta el tamaño y color según tu spinner
+              <Spinner />
             ) : isAuthenticated ? (
-              <Button asChild variant="ghost" className="w-2/5 py-3 text-lg bg-blue-200" size="lg">
-                <Link to="/dashboard">Dashboard</Link>
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-2/5">
+                <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+              </motion.div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
-                  <Link to="/login">Login</Link>
-                </Button>
-                <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
-                  <Link to="/register">Registro</Link>
-                </Button>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
+                    <Link to="/login">Login</Link>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button asChild variant="ghost" className="w-full py-3 text-lg bg-blue-200" size="lg">
+                    <Link to="/register">Registro</Link>
+                  </Button>
+                </motion.div>
               </div>
             )}
-          </div>
+          </motion.div>
 
-          {/* Sección de Características (mantenida como en el ejemplo anterior) */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-blue-500 text-white p-3 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 16v-2m0-10.039V12m0 4.039V14m5.96-7.96l-1.414 1.414M4.04 15.96l1.414-1.414m0-8.486l-1.414-1.414m12.728 0l-1.414 1.414" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Innovación</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                  Utilizamos tecnología de punta para ofrecerte las noticias de ultimo momento.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-green-500 text-white p-3 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697A9.009 9.009 0 003 12c0 1.63.425 3.166 1.198 4.5H3a1 1 0 00-1 1v3a1 1 0 001 1h3.5M21 12a8.962 8.962 0 00-2.035-5.632M17.5 19H21a1 1 0 001-1v-3a1 1 0 00-1-1h-1.802A9.008 9.008 0 0015 3.5" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Lideres</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                Somos líderes en la difusión de noticias de último momento, conectando al mundo con la información que importa.
-                </p>
-              </div>
-            </div>
-             {/* Puedes añadir más características aquí si lo deseas */}
-             
-            {/* Nuevas Características */}
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-purple-500 text-white p-3 rounded-full">
-                {/* Icono de Soporte 24/7 */}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Soporte 24/7</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                Nuestro equipo de soporte está disponible para asistirte con cualquier consulta sobre nuestra plataforma de noticias.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-red-500 text-white p-3 rounded-full">
-                {/* Icono de Seguridad Avanzada */}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Seguridad Avanzada</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                Protegemos la integridad de nuestra información y la privacidad de nuestros lectores con los más altos estándares de seguridad.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-indigo-500 text-white p-3 rounded-full">
-                {/* Icono de Integración Fácil */}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Integración Fácil</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                Integra fácilmente nuestras noticias en tus plataformas y servicios favoritos para mantenerte siempre al día.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4 p-4 bg-transparent dark:bg-gray-700 rounded-lg">
-              <div className="flex-shrink-0 bg-teal-500 text-white p-3 rounded-full">
-                {/* Icono de Escalabilidad */}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Escalabilidad</h3>
-                <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">
-                Nuestra cobertura informativa se expande y adapta continuamente para satisfacer tu creciente necesidad de estar bien informado.
-                </p>
-              </div>
-          </div>
-        </div>
-        </div>
+          <motion.div
+            className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
+            initial="offscreen"
+            whileInView="onscreen"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={cardVariants}
+          >
+            {/* Aquí mapeamos las tarjetas para no repetir código */}
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                className="flex cursor-pointer items-start space-x-4 rounded-xl bg-white/30 p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:bg-gray-700/40"
+                variants={cardVariants}
+              >
+                {/* ... El contenido de tu tarjeta */}
+                <div className={`flex-shrink-0 ${feature.bgColor} text-white p-3 rounded-full`}>
+                  {feature.icon}
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{feature.title}</h3>
+                  <p className="font-semibold text-gray-900 dark:text-gray-400 mt-1">{feature.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
     </>
   );
 };
 
-export default Home
+export default Home;
