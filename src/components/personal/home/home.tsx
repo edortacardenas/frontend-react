@@ -75,6 +75,88 @@ const features = [
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuthStatus, setIsLoadingAuthStatus] = useState(true);
+  const [rezizeglove, setRezizeGlove] = useState(1000);
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+  
+      // Ajusta el tamaño del globo dinámicamente en función del ancho de la ventana
+      const newSize = width < 590 ? Math.floor(width * 1.50) : 1000;
+  
+      setRezizeGlove(newSize);
+    };
+  
+    // Initial check
+    handleResize();
+  
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+
+    // This script tag will be added to the document to load and run the globe logic.
+    const globeScript = document.createElement('script');
+    globeScript.type = 'module';
+    // We use textContent to inject the exact script from the original HTML.
+    globeScript.textContent = `
+      import createGlobe from 'https://cdn.skypack.dev/cobe';
+
+      let phi = 0;
+      let canvas = document.getElementById("cobe");
+
+      // Check if canvas exists and hasn't been initialized yet to prevent duplicates on hot-reloads
+      if (canvas && !canvas.getAttribute('data-globe-initialized')) {
+        canvas.setAttribute('data-globe-initialized', 'true');
+        
+        const globe = createGlobe(canvas, {
+          devicePixelRatio: 2,
+          width: ${rezizeglove},
+          height: ${rezizeglove},
+          phi: 0,
+          theta: 0,
+          dark: 1,
+          diffuse: 1.2,
+          scale: 1,
+          mapSamples: 16000,
+          mapBrightness: 6,
+          baseColor: [0.3, 0.3, 0.9],
+          markerColor: [0.9, 0.5, 1] ,
+          glowColor:  [0.2, 0.2, 1] ,
+          offset: [0, 0],
+          markers: [
+            { location: [37.7595, -122.4367], size: 0.03 },
+            { location: [40.7128, -74.006], size: 0.1 },
+            { location: [51.5074, -0.1278], size: 0.05 },
+            { location: [35.6762, 139.6503], size: 0.05 },
+            { location: [22.3193, 114.1694], size: 0.03 },
+            { location: [-33.8688, 151.2093], size: 0.03 },
+          ],
+          onRender: (state) => {
+            state.phi = phi;
+            phi += 0.005;
+          },
+        });
+      }
+    `;
+    
+    document.body.appendChild(globeScript);
+
+    // Cleanup function to remove the script when the component is unmounted.
+    return () => {
+      // It's tricky to remove module scripts reliably, but we can try.
+      const scripts = document.querySelectorAll('script[type="module"]');
+      scripts.forEach(s => {
+        if (s.textContent && s.textContent.includes('createGlobe')) {
+          s.remove();
+        }
+      });
+      const canvas = document.getElementById("cobe");
+      if (canvas) {
+        canvas.removeAttribute('data-globe-initialized');
+      }
+    };
+  }, [rezizeglove]); // Re-run effect when size change
 
   useEffect(() => {
     const verifyUserAuthentication = async () => {
@@ -133,9 +215,10 @@ const Home = () => {
   };
 
 
+
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
+      <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-2 lg:px-4 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
         <motion.div
           className="max-w-4xl w-full bg-white/10 dark:bg-gray-800/20 shadow-xl rounded-lg p-8 md:p-12 backdrop-blur-sm"
           initial="hidden"
@@ -185,6 +268,21 @@ const Home = () => {
               </div>
             )}
           </motion.div>
+           
+          {/* Globe visualization */}
+          <div className="flex justify-center items-center">
+            <div className="relative max-w-[500px] aspect-square">
+              <div className=" bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
+              <canvas
+                id="cobe"
+                
+                width="500"
+                height="500"
+                className="relative z-10 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+           
 
           <motion.div
             className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
@@ -203,6 +301,7 @@ const Home = () => {
                 {/* ... El contenido de tu tarjeta */}
                 <div className={`flex-shrink-0 ${feature.bgColor} text-white p-3 rounded-full`}>
                   {feature.icon}
+                  
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{feature.title}</h3>
