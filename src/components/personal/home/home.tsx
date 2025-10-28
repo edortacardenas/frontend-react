@@ -91,7 +91,7 @@ const Home = () => {
   
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [rezizeglove]);
 
   useEffect(() => {
 
@@ -115,14 +115,14 @@ const Home = () => {
           height: ${rezizeglove},
           phi: 0,
           theta: 0,
-          dark: 1,
+          dark: 0,
           diffuse: 1.2,
           scale: 1,
           mapSamples: 16000,
           mapBrightness: 6,
-          baseColor: [0.3, 0.3, 0.9],
-          markerColor: [0.9, 0.5, 1] ,
-          glowColor:  [0.2, 0.2, 1] ,
+          baseColor: [0.3, 0.5, 0.8],
+          markerColor: [0.9, 1, 0.8],
+          glowColor:  [0.3, 0.7, 0.9] ,
           offset: [0, 0],
           markers: [
             { location: [37.7595, -122.4367], size: 0.03 },
@@ -272,7 +272,7 @@ const Home = () => {
           {/* Globe visualization */}
           <div className="flex justify-center items-center">
             <div className="relative max-w-[500px] aspect-square">
-              <div className=" bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
+              <div className=" bg-gradient-to-r from-purple-300/20 to-pink-300/20 rounded-full blur-3xl"></div>
               <canvas
                 id="cobe"
                 
