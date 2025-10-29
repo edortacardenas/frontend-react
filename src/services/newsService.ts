@@ -24,12 +24,6 @@ interface NewsApiResponse {
   code?: string; // Para errores de la API
 }
 
-// Interface for error responses from your backend
-interface BackendErrorResponse {
-  message: string;
-  code?: string;
-  details?: string;
-}
 
 export const getNewsFetch = async (page = 1, pageSize = 10): Promise<Article[]> => {
   // API_KEY is no longer needed here as the backend handles it.
@@ -43,20 +37,8 @@ export const getNewsFetch = async (page = 1, pageSize = 10): Promise<Article[]> 
   const response = await fetch(`${BACKEND_NEWS_URL}?${params.toString()}`);
 
   if (!response.ok) {
-    let errorMessage = `Error HTTP: ${response.status} ${response.statusText}`;
-    try {
-      // Errors from your backend will have a specific structure
-      const errorData: BackendErrorResponse = await response.json();
-      if (errorData.message) {
-        errorMessage = `Error desde el backend: ${errorData.message}`;
-        if (errorData.code) errorMessage += ` (código: ${errorData.code})`;
-        if (errorData.details) errorMessage += ` (detalles: ${errorData.details})`;
-      }
-    } catch (e) {
-      console.warn('No se pudo parsear el JSON de error del backend. Usando mensaje HTTP por defecto.', e);
-    }
-    console.error('Error al obtener noticias:', errorMessage);
-    throw new Error(errorMessage);
+    
+    throw new Error(`Error al obtener noticias revise su conexion`);
   }
 
   const data: NewsApiResponse = await response.json();

@@ -1,38 +1,88 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"; 
+import { Label } from "@/components/ui/label"; 
+import { Checkbox } from "@/components/ui/checkbox"; 
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { checkNewsApiConnectionFetch } from "../../../services/newsService"; // Asegúrate que la ruta sea correcta
-import { Loader2, Trash2, Edit3, UserCog, Users, Save } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-  DialogDescription,
-  //DialogTrigger, // Necesario si el botón de abrir está fuera del control directo del estado
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input"; // Para los campos del formulario
-import { Label } from "@/components/ui/label"; // Para las etiquetas del formulario
-import { Checkbox } from "@/components/ui/checkbox"; // Para el campo isAdmin
-import {
-  logoutUser,
-  fetchAdminRole, // You might not need this if fetchAuthStatus provides isAdmin
-  fetchAllUsers,
-  deleteUserById,
-  fetchUserDetailsById,
-  updateUserById,
-  Role, // Import from helpers
-  User, // Import from helpers
-  UpdateUserFormData // Import from helpers
-} from "../../../lib/helpers";
+import { Loader2, Trash2, Edit3, UserCog, Users, Save, Newspaper, Settings, LogOut, UserCheck, Home } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from "@/components/ui/dialog";
+import { logoutUser, fetchAdminRole, fetchAllUsers, deleteUserById, fetchUserDetailsById, updateUserById, Role, User, UpdateUserFormData } from "../../../lib/helpers";
+
+// Importa Recharts
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
+
+
+// --- SUB-COMPONENTE: GRÁFICO DE ROLES ---
+const UserRolePieChart = ({ data }: { data: { name: string; value: number }[] }) => {
+  const COLORS = ['#0088FE', '#00C49F']; // Azul para Admin, Verde para User
+  return (
+    <div style={{ width: '100%', height: 200 }}>
+      <ResponsiveContainer>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+            nameKey="name"
+            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+          >
+            {data.map((_, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+// --- SUB-COMPONENTE: TARJETAS DE ESTADÍSTICAS ---
+const DashboardStats = ({ total, admins, users }: { total: number; admins: number; users: number }) => (
+  <div className="grid gap-6 md:grid-cols-3">
+    <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">Total de Usuarios</CardTitle>
+        <Users className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{total}</div>
+        <p className="text-xs text-muted-foreground">Usuarios registrados en el sistema</p>
+      </CardContent>
+    </Card>
+    <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">Administradores</CardTitle>
+        <UserCog className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{admins}</div>
+        <p className="text-xs text-muted-foreground">Cuentas con privilegios elevados</p>
+      </CardContent>
+    </Card>
+    <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">Usuarios Estándar</CardTitle>
+        <UserCheck className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{users}</div>
+        <p className="text-xs text-muted-foreground">Cuentas con permisos regulares</p>
+      </CardContent>
+    </Card>
+  </div>
+);
 
 const Dashboard = () => {
   const navigate = useNavigate(); // Hook para redirigir
-  const [isCheckingConnection, setIsCheckingConnection] = useState(false);
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [isAdmin, setIsAdmin] = useState(false); // Estado para el rol de admin
@@ -45,117 +95,75 @@ const Dashboard = () => {
   const [isSubmittingUpdate, setIsSubmittingUpdate] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false); // Estado para la animación de carga de página
 
-  const handlelogout = async () => {
-    try {
-      await logoutUser();
-      toast.success("Sesión cerrada exitosamente.");
-      // Ya no es necesario gestionar isUserAuthenticated localmente aquí
-      // ProtectedRoute se encargará de la redirección si se intenta acceder de nuevo.
-      navigate("/login");
-    } catch (error: any) {
-      toast.error(error.message || "Error al cerrar sesión.");
-      console.error("Error en la solicitud de logout:", error);
-      // Optionally, if logout fails due to auth issues, still redirect
-      if (error.message && (error.message.includes("401") || error.message.includes("failed"))) {
-        navigate("/login");
-      }
-    }
-  }
-
-  
-  
-  useEffect(() => {
-    // Fetch admin status only if authenticated.
-    // Como ProtectedRoute asegura la autenticación, solo necesitamos verificar isLoadingAdminStatus.
-    if (!isLoadingAdminStatus) {
-      return;
-    }
-
-    const fetchAdminStatus = async () => {
-      // setIsLoadingAdminStatus(true); // This line is redundant due to the effect's guard condition.
-      // If the effect proceeds, isLoadingAdminStatus is already true.
-      try {
-        // This check is only truly necessary if fetchAuthStatus doesn't return isAdmin
-        // or if you need to re-verify admin status independently.
-        const isAdminUser = await fetchAdminRole();
-        setIsAdmin(isAdminUser);
-      } catch (error: any) {
-        console.error("Error fetching admin status:", error);
-        setIsAdmin(false); // Asumir no admin en caso de error de red
-        toast.error(error.message || "Error al verificar estado de administrador.");
-        // Si obtener el rol de admin da 401, el token podría haber expirado o ser inválido.
-        // ProtectedRoute debería eventualmente capturar esto en una nueva navegación,
-        // pero una redirección aquí puede ser proactiva.
-        if (error.message && error.message.includes("401")) {
-          navigate("/login");
-        }
-      } finally {
-        setIsLoadingAdminStatus(false);
-      }
-    };
-    fetchAdminStatus();
-  }, [isLoadingAdminStatus, navigate]); // isUserAuthenticated eliminado de las dependencias
-
-  useEffect(() => {
-    // Activa la animación de carga de página poco después de que el componente se monte
-    // Esto asegura que el estado inicial (antes de la animación) se renderice primero
-    const animationTimer = setTimeout(() => {
-      setIsPageLoaded(true);
-    }, 50); // Un pequeño retraso puede ayudar a asegurar que la transición sea suave
-    return () => clearTimeout(animationTimer);
-  }, []);
-
-  const handleViewNews = async () => {
-    setIsCheckingConnection(true);
-    try {
-      const isConnected = await checkNewsApiConnectionFetch();
-      if (isConnected) {
-        toast.success("Conexion exitosa "); // Mensaje exacto solicitado
-        navigate("/noticias", { state: { connectionSuccess: true } });
-      } else {
-        // El toast de error se mostrará en la página de noticias.
-        // Navegamos y pasamos el estado de error.
-        navigate("/noticias", { 
-          state: { 
-            connectionSuccess: false, 
-            errorMessage: "Conexion fallida ocurrio un error" // Mensaje exacto solicitado
-          } 
-        });
-      }
-    } catch (error) { // Error en la propia función checkNewsApiConnectionFetch
-      console.error("Error durante la comprobación de conexión API:", error);
-      // Navegar a noticias indicando el fallo
-      navigate("/noticias", { state: { connectionSuccess: false, errorMessage: "Conexion fallida ocurrio un error" } });
-    } finally {
-      setIsCheckingConnection(false);
-    }
-  };
-  
   const fetchUsers = async () => {
-    if (!isAdmin) return;
     setIsLoadingUsers(true);
     try {
       const fetchedUsers = await fetchAllUsers();
       setUsers(fetchedUsers);
     } catch (error: any) {
-      console.error("Error fetching users:", error);
       toast.error(error.message || "No se pudieron cargar los usuarios.");
-      if (error.message && error.message.includes("401")) navigate("/login");
-      setUsers([]); // Limpiar usuarios en caso de error
+      if (error.message?.includes("401")) navigate("/login");
     } finally {
       setIsLoadingUsers(false);
     }
   };
 
-  const handleOpenUsersModal = () => {
-    if (isAdmin) {
-      setIsUsersModalOpen(true);
-      fetchUsers(); // Cargar usuarios cuando se abre el modal
-    } else {
-      toast.error("No tienes permisos para acceder a esta sección.");
+  // --- LÓGICA DE DATOS Y EFECTOS ---
+  
+  useEffect(() => {
+    const fetchAdminStatus = async () => {
+      try {
+        const isAdminUser = await fetchAdminRole();
+        setIsAdmin(isAdminUser);
+        if (isAdminUser) {
+          fetchUsers(); // Cargar usuarios si es admin
+        }
+      } catch (error: any) {
+        console.error("Error fetching admin status:", error);
+        if (error.message?.includes("401")) navigate("/login");
+      } finally {
+        setIsLoadingAdminStatus(false);
+      }
+    };
+    fetchAdminStatus();
+  }, [navigate]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsPageLoaded(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
+
+  
+
+  // --- MEMOIZACIÓN PARA CÁLCULOS ---
+
+  const userStats = useMemo(() => {
+    const adminCount = users.filter(u => u.role === Role.ADMIN).length;
+    return {
+      total: users.length,
+      admins: adminCount,
+      users: users.length - adminCount,
+    };
+  }, [users]);
+
+  const chartData = useMemo(() => [
+    { name: 'Admin', value: userStats.admins },
+    { name: 'User', value: userStats.users },
+  ], [userStats]);
+
+  // --- MANEJADORES DE EVENTOS ---
+  
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Sesión cerrada exitosamente.");
+      navigate("/login");
+    } catch (error: any) {
+      toast.error(error.message || "Error al cerrar sesión.");
     }
   };
 
+  
   const handleDeleteUser = async (userId: string | number, name: string) => {
     if (!window.confirm(`¿Estás seguro de que quieres eliminar al usuario con nombre ${name} ?`)) {
       return;
@@ -238,167 +246,115 @@ const Dashboard = () => {
   };
 
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
-      {/* Contenedor principal del contenido con animación de entrada */}
+      <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
       <div className={`
-        max-w-7xl mx-auto w-full
+        w-full max-w-7xl mx-auto p-6 space-y-8
+        bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur-sm
+        rounded-2xl shadow-xl border border-white/20
         transition-all duration-700 ease-out
         ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
       `}>
-        <header className="mb-8"> {/* El encabezado también se animará como parte del contenedor principal */}
-          {/* Contenedor principal del encabezado: flex-col en móvil, md:flex-row en escritorio */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            {/* Sección de título y subtítulo: centrado en móvil, alineado a la izquierda en md+ */}
-            <div className="text-center md:text-left mb-4 md:mb-0">
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
-              <p className="font-semibold text-gray-800 dark:text-gray-300">Bienvenido a tu panel de control</p>
-            </div>
-            {/* Sección de botones: fila centrada en móvil, alineada a la derecha en md+ */}
-            <div className="flex flex-row items-center justify-center md:justify-end space-x-2 md:space-x-3">
-              <Button asChild variant="ghost" className=" bg-blue-200" >
-              <Link to="/">Home</Link>
-              </Button>
-              <Button variant="destructive" onClick={handlelogout}>
-                  Logout
-              </Button>
-            </div>
+        {/* Encabezado del Dashboard */}
+        <header className="flex flex-col sm:flex-row items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Dashboard de Control</h1>
+            <p className="text-gray-600 dark:text-gray-300">Bienvenido, aquí tienes un resumen de la actividad.</p>
+          </div>
+          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+            <Button asChild variant="ghost" size="icon"><Link to="/"><Home className="h-5 w-5"/></Link></Button>
+            <Button variant="destructive" onClick={handleLogout}><LogOut className="mr-2 h-4 w-4"/> Salir</Button>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          {
-            isAdmin && (
-              <Card
-              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
-              style={{background:"transparent"}}
-            >
+        {/* Sección de Estadísticas (Solo para Admins) */}
+        {isLoadingAdminStatus ? (
+          <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>
+        ) : isAdmin && (
+          <DashboardStats total={userStats.total} admins={userStats.admins} users={userStats.users} />
+        )}
+        
+        {/* Sección de Acciones Principales */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {isAdmin && (
+            <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105" >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-lg font-bold">
-                  Usuarios
-                </CardTitle>
-                <Users className="h-5 w-5 text-muted-foreground" />
+                <CardTitle className="flex items-center gap-2 text-sm font-medium" > Administrar Usuarios</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <p className="font-bold text-gray-900">Administra los usuarios registrados.</p>
-                <Button 
-                  variant="ghost" 
-                  className="mt-4 w-full" 
-                  onClick={handleOpenUsersModal}
-                  disabled={!isAdmin || isLoadingAdminStatus}
-                >
-                  {isLoadingAdminStatus ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Cargando...</>
-                  ) : "Ver Usuarios"}
-                  
-                </Button>
+                <p className="text-sm text-muted-foreground mb-4">Visualiza, edita y elimina usuarios del sistema.</p>
+                <Button className="w-full" onClick={() => setIsUsersModalOpen(true)}>Gestionar</Button>
               </CardContent>
-          </Card>)
-          }
-          
+            </Card>
+          )}
 
-          {/* Card 2 */}
-          <Card
-              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
-              style={{background:"transparent"}}
-            >
+          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-bold">
-                Noticias
-              </CardTitle>
-              <UserCog className="h-5 w-5 text-muted-foreground" /> {/* Icono placeholder */}
+              <CardTitle className="flex items-center gap-2 text-sm font-medium"> Ver Noticias</CardTitle>
+              <Newspaper className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <p className="font-bold text-gray-900">Consulta las noticias de ultimo momento.</p>
-              <Button variant="ghost" className="mt-4 w-full" onClick={handleViewNews} disabled={isCheckingConnection}>
-                {isCheckingConnection ? (
-                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Verificando...</>
-                ) : (
-                  "Ver Noticias"
-                )}
+              <p className="text-sm text-muted-foreground mb-4">Conéctate a la API y consulta las últimas noticias.</p>
+              <Button className="w-full" onClick={() => navigate("/noticias")}>
+                Ir a Noticias
               </Button>
             </CardContent>
           </Card>
 
-          {/* Card 3 */}
-          <Card
-              className="shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-[1.03]"
-              style={{background:"transparent"}}
-            >
+          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-bold">
-                Configuración
-              </CardTitle>
-              <UserCog className="h-5 w-5 text-muted-foreground" />
+              <CardTitle className="flex items-center gap-2 text-sm font-medium"> Configuración</CardTitle>
+              <Settings className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <p className="font-bold text-gray-900">Personaliza las configuraciones de tu cuenta.</p>
-              <Button variant="ghost" className="mt-4 w-full" onClick={() => navigate("/config")}>
-                Configurar
-              </Button>
+              <p className="text-sm text-muted-foreground mb-4">Ajusta la configuración de tu perfil y preferencias.</p>
+              <Button className="w-full" variant="outline" onClick={() => navigate("/config")}>Configurar Cuenta</Button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Modal para administrar usuarios */}
+        {/* Modales (su JSX podría estar en sus propios componentes) */}
         <Dialog open={isUsersModalOpen} onOpenChange={setIsUsersModalOpen}>
-          <DialogContent className="sm:max-w-[625px] bg-white dark:bg-gray-800">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-semibold text-gray-800 dark:text-white">Administrar Usuarios</DialogTitle>
-              <DialogDescription>
-                This action show all the users register in the application
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-4 max-h-[60vh] overflow-y-auto">
-              {isLoadingUsers ? (
-                <div className="flex justify-center items-center h-40">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                  <p className="ml-3 text-gray-600 dark:text-gray-300">Cargando usuarios...</p>
+            <DialogContent className="sm:max-w-[800px] bg-white dark:bg-gray-800">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl">Administrar Usuarios</DialogTitle>
+                    <DialogDescription>Gestiona los usuarios registrados y visualiza las estadísticas de roles.</DialogDescription>
+                </DialogHeader>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 max-h-[70vh]">
+                    {/* Columna de Gráfico */}
+                    <div className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 className="text-lg font-semibold mb-2">Distribución de Roles</h3>
+                        {users.length > 0 ? <UserRolePieChart data={chartData} /> : <p>No hay datos para mostrar.</p>}
+                    </div>
+                    {/* Columna de Lista de Usuarios */}
+                    <div className="overflow-y-auto pr-2">
+                    {isLoadingUsers ? (
+                        <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>
+                    ) : users.length > 0 ? (
+                        <ul className="space-y-3">
+                        {users.map((user) => (
+                            <li key={user.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                                <div>
+                                    <p className="font-medium">{user.name}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                                </div>
+                                <div className="flex space-x-2">
+                                    <Button variant="outline" size="icon" onClick={() => openUpdateUserModal(user)}><Edit3 className="h-4 w-4"/></Button>
+                                    <Button variant="destructive" size="icon" onClick={() => handleDeleteUser(user.id, user.name)}><Trash2 className="h-4 w-4"/></Button>
+                                </div>
+                            </li>
+                        ))}
+                        </ul>
+                    ) : <p>No se encontraron usuarios.</p>}
+                    </div>
                 </div>
-              ) : users.length > 0 ? (
-                <ul className="space-y-3">
-                  {users.map((user) => (
-                    <li 
-                      key={user.id} 
-                      className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md shadow-sm"
-                    >
-                      <div className="mb-2 sm:mb-0">
-                        <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
-                      </div>
-                      <div className="flex space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => openUpdateUserModal(user)}
-                          className="text-blue-600 border-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-400 dark:hover:bg-gray-600"
-                        >
-                          <Edit3 className="h-4 w-4 mr-1" /> Actualizar
-                        </Button>
-                        <Button 
-                          variant="destructive" 
-                          size="sm" 
-                          onClick={() => handleDeleteUser(user.id, user.name )}
-                        >
-                          <Trash2 className="h-4 w-4 mr-1" /> Eliminar
-                        </Button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-10">No hay usuarios para mostrar o no se pudieron cargar.</p>
-              )}
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">Cancelar</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
+                <DialogFooter>
+                    <DialogClose asChild><Button type="button" variant="secondary">Cerrar</Button></DialogClose>
+                </DialogFooter>
+            </DialogContent>
         </Dialog>
 
-        {/* Modal para actualizar usuario */}
+        {/* El modal de actualización de usuario permanece sin cambios en su estructura interna */}
         <Dialog open={isUpdateUserModalOpen} onOpenChange={(isOpen) => {
           setIsUpdateUserModalOpen(isOpen);
           if (!isOpen) {
