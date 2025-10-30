@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"; 
 import { Checkbox } from "@/components/ui/checkbox"; 
 import { toast } from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Loader2, Trash2, Edit3, UserCog, Users, Save, Newspaper, Settings, LogOut, UserCheck, Home } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from "@/components/ui/dialog";
 import { logoutUser, fetchAdminRole, fetchAllUsers, deleteUserById, fetchUserDetailsById, updateUserById, Role, User, UpdateUserFormData } from "../../../lib/helpers";
@@ -100,9 +100,13 @@ const Dashboard = () => {
     try {
       const fetchedUsers = await fetchAllUsers();
       setUsers(fetchedUsers);
-    } catch (error: any) {
-      toast.error(error.message || "No se pudieron cargar los usuarios.");
-      if (error.message?.includes("401")) navigate("/login");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "No se pudieron cargar los usuarios.");
+      } else {
+        toast.error("No se pudieron cargar los usuarios.");
+      }
+      if (error instanceof Error && error.message?.includes("401")) navigate("/login");
     } finally {
       setIsLoadingUsers(false);
     }
@@ -118,9 +122,9 @@ const Dashboard = () => {
         if (isAdminUser) {
           fetchUsers(); // Cargar usuarios si es admin
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching admin status:", error);
-        if (error.message?.includes("401")) navigate("/login");
+        if (error instanceof Error && error.message?.includes("401")) navigate("/login");
       } finally {
         setIsLoadingAdminStatus(false);
       }
@@ -157,12 +161,15 @@ const Dashboard = () => {
     try {
       await logoutUser();
       toast.success("Sesión cerrada exitosamente.");
-      navigate("/login");
-    } catch (error: any) {
-      toast.error(error.message || "Error al cerrar sesión.");
+      navigate("/");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Error al cerrar sesión.");
+      } else {
+        toast.error("Error al cerrar sesión.");
+      }
     }
   };
-
   
   const handleDeleteUser = async (userId: string | number, name: string) => {
     if (!window.confirm(`¿Estás seguro de que quieres eliminar al usuario con nombre ${name} ?`)) {
@@ -172,10 +179,14 @@ const Dashboard = () => {
       await deleteUserById(userId);
       toast.success(`Usuario ${name} eliminado correctamente.`);
       setUsers(prevUsers => prevUsers.filter(user => user.id !== userId)); // Actualizar UI
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting user:", error);
-      toast.error(error.message || "No se pudo eliminar el usuario.");
-      if (error.message && error.message.includes("401")) navigate("/login");
+      if (error instanceof Error) {
+        toast.error(error.message || "No se pudo eliminar el usuario.");
+      } else {
+        toast.error("No se pudo eliminar el usuario.");
+      }
+      if (error instanceof Error && error.message.includes("401")) navigate("/login");
     }
   };
 
@@ -190,13 +201,14 @@ const Dashboard = () => {
         email: userData.email,
         role: userData.role, 
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching user details for update:", error);
-      toast.error(error.message || "No se pudieron cargar los detalles del usuario.");
-      if (error.message && error.message.includes("401")) navigate("/login");
-      // Considerar cerrar el modal si la carga falla críticamente
-      // setIsUpdateUserModalOpen(false); 
-      // setCurrentUserToUpdate(null);
+      if (error instanceof Error) {
+        toast.error(error.message || "No se pudieron cargar los detalles del usuario.");
+      } else {
+        toast.error("No se pudieron cargar los detalles del usuario.");
+      }
+      if (error instanceof Error && error.message.includes("401")) navigate("/login");
     } finally {
       setIsLoadingCurrentUserDetails(false);
     }
@@ -236,10 +248,14 @@ const Dashboard = () => {
       toast.success("Usuario actualizado correctamente");
       setIsUpdateUserModalOpen(false);
       fetchUsers(); // Refrescar la lista de usuarios
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating user:", error);
-      toast.error(error.message || "Ocurrió un error al actualizar el usuario.");
-      if (error.message && error.message.includes("401")) navigate("/login");
+      if (error instanceof Error) {
+        toast.error(error.message || "Ocurrió un error al actualizar el usuario.");
+      } else {
+        toast.error("Ocurrió un error al actualizar el usuario.");
+      }
+      if (error instanceof Error && error.message.includes("401")) navigate("/login");
     } finally {
       setIsSubmittingUpdate(false);
     }
@@ -261,8 +277,8 @@ const Dashboard = () => {
             <p className="text-gray-600 dark:text-gray-300">Bienvenido, aquí tienes un resumen de la actividad.</p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button asChild variant="ghost" size="icon"><Link to="/"><Home className="h-5 w-5"/></Link></Button>
-            <Button variant="destructive" onClick={handleLogout}><LogOut className="mr-2 h-4 w-4"/> Salir</Button>
+            <Button variant="ghost" onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
+            <Button variant="destructive" onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
           </div>
         </header>
 
