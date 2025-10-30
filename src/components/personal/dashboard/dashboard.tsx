@@ -277,8 +277,8 @@ const Dashboard = () => {
             <p className="text-gray-600 dark:text-gray-300">Bienvenido, aquí tienes un resumen de la actividad.</p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button variant="ghost" onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
-            <Button variant="destructive" onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
+            <Button variant="ghost" className='hover:cursor-pointer' onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
+            <Button variant="destructive" className='hover:bg-[#ff3f41] hover:text-accent-foreground dark:hover:bg-accent/50 hover:cursor-pointer' onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
           </div>
         </header>
 
@@ -292,39 +292,39 @@ const Dashboard = () => {
         {/* Sección de Acciones Principales */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {isAdmin && (
-            <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105" >
+            <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => setIsUsersModalOpen(true)}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="flex items-center gap-2 text-sm font-medium" > Administrar Usuarios</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">Visualiza, edita y elimina usuarios del sistema.</p>
-                <Button className="w-full" onClick={() => setIsUsersModalOpen(true)}>Gestionar</Button>
+                <Button className="w-full">Gestionar</Button>
               </CardContent>
             </Card>
           )}
 
-          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105">
+          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => navigate("/noticias")}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="flex items-center gap-2 text-sm font-medium"> Ver Noticias</CardTitle>
               <Newspaper className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">Conéctate a la API y consulta las últimas noticias.</p>
-              <Button className="w-full" onClick={() => navigate("/noticias")}>
+              <Button className="w-full" >
                 Ir a Noticias
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105">
+          <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => navigate("/config")}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="flex items-center gap-2 text-sm font-medium"> Configuración</CardTitle>
               <Settings className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">Ajusta la configuración de tu perfil y preferencias.</p>
-              <Button className="w-full" variant="outline" onClick={() => navigate("/config")}>Configurar Cuenta</Button>
+              <Button className="w-full">Configurar Cuenta</Button>
             </CardContent>
           </Card>
         </div>
