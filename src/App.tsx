@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AppRouter } from "./Router";
 import Spinner from "./components/ui/spinner";
 import { Toaster } from "react-hot-toast";
+import { Navbar } from "./components/navBar/Navbar";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
     
     <Router>
       <Suspense fallback={<Spinner/>}>
+        <Navbar />
         <AppRouter />
       </Suspense>
     </Router>
