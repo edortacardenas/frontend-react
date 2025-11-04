@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion, Variants, cubicBezier } from "framer-motion";
 import { Button } from "@/components/ui/button"; // Asegúrate que la ruta sea correcta
-import { fetchAuthStatus } from "../../../lib/helpers"; // Import the new helper function
+//import { fetchAuthStatus } from "../../../lib/helpers"; // Import the new helper function
+import { useAuth } from "@/context/AuthContext";
 
 // Array de características sin cambios
 const features = [
@@ -51,7 +52,7 @@ const features = [
 ];
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth(); // Usa el contexto
   const [rezizeglove, setRezizeGlove] = useState(1000);
 
   // useEffect para el manejo del globo y la autenticación (sin cambios)
@@ -121,17 +122,8 @@ const Home = () => {
   }, [rezizeglove]);
 
   useEffect(() => {
-    const verifyUserAuthentication = async () => {
-      try {
-        const authData = await fetchAuthStatus();
-        setIsAuthenticated(authData);
-      } catch (error) {
-        console.error("Failed to verify authentication status:", error);
-        setIsAuthenticated(false);
-      } 
-    };
-    verifyUserAuthentication();
-  }, []);
+   
+  }, [isAuthenticated]);
 
   // -- ANIMATION VARIANTS --
 

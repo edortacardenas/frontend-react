@@ -1,37 +1,23 @@
-'use client';
-
-
 import { Menu } from 'lucide-react';
-
-// Componentes de Shadcn/ui
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
-  SheetHeader, // <--- Importado
-  SheetTitle,  // <--- Importado
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { fetchAuthStatus } from '@/lib/helpers';
+import { useAuth } from '@/context/AuthContext'; // Importa el hook useAuth
+import { useEffect } from 'react';
+
 
 export const Navbar = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated} = useAuth(); // Usa el contexto
 
   useEffect(() => {
-      const verifyUserAuthentication = async () => {
-        try {
-          const authData = await fetchAuthStatus();
-          setIsAuthenticated(authData);
-        } catch (error) {
-          console.error("Failed to verify authentication status in Home component:", error);
-          setIsAuthenticated(false);
-        } 
-      };
-  
-      verifyUserAuthentication();
-    }, []);
+    // Aquí podrías agregar lógica adicional si es necesario
+  }, []);
 
   return (
     <nav className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900">

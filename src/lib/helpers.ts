@@ -16,8 +16,10 @@ interface OnSubmitHelperArgs {
 export interface OnSubmitHelperResult {
   success: boolean;
   mfaRequired?: boolean;
+  navigate: (path: string) => void;
   email?: string; // Email of the user if MFA is required
   message?: string; // General message or error message
+  login: () => void; // <-- Añade la función login al tipo
 }
 
 interface HandleOtpArgs {
@@ -26,6 +28,7 @@ interface HandleOtpArgs {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   navigate: NavigateFunction;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
+  login: () => void;
 }
 interface HandleResendOtpArgs {
   email: string;
@@ -94,8 +97,13 @@ export const onSubmitHelper = async ({
     const data = await response.json();
     if (response.status === 200) {
       toast.success("Inicio de sesión exitoso");
-      // navigate("/dashboard"); // Navigation will be handled by the calling component
-      return { success: true, mfaRequired: false, message: "Inicio de sesión exitoso" };
+      return { 
+        success: true, 
+        mfaRequired: false, 
+        message: "Inicio de sesión exitoso", 
+        navigate, 
+        login: () => {} 
+      };
     } else {
       const errorMessage = data.msg?.msg || data.msg || "Error desconocido en el inicio de sesión.";
       toast.error("Error: " + errorMessage);
@@ -103,16 +111,16 @@ export const onSubmitHelper = async ({
       if (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("verifica")) {
         setEmailState(values.email);
         // setShowModal(true); // This will be handled by the calling component
-        return { success: false, mfaRequired: true, email: values.email, message: errorMessage };
+        return { success: false, mfaRequired: true, email: values.email, message: errorMessage, navigate, login: () => {} };
       } else {
         console.log("No se requiere verificación OTP o error desconocido.");
-        return { success: false, message: errorMessage };
+        return { success: false, message: errorMessage, navigate, login: () => {} };
       }
     }
   } catch (error) {
     toast.error("Error en la petición");
     console.error("Error en la petición:", error);
-    return { success: false, message: "Error en la petición de red." };
+    return { success: false, message: "Error en la petición de red.", navigate, login: () => {} };
   } finally {
     setIsLoading(false);
   }
@@ -124,6 +132,7 @@ export const handleVerifyOtpHelper = async ({
   setShowModal,
   navigate,
   setOtp,
+  login
 }: HandleOtpArgs) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verify-otp`, {
@@ -136,6 +145,7 @@ export const handleVerifyOtpHelper = async ({
 
     if (response.ok) {
       toast.success("Success verification");
+      login();
       setShowModal(false);
       navigate("/login"); // O a donde deba ir después de verificar OTP
     } else {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"; 
@@ -8,7 +8,9 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Trash2, Edit3, UserCog, Users, Save, Newspaper, Settings, LogOut, UserCheck, Home } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from "@/components/ui/dialog";
-import { logoutUser, fetchAdminRole, fetchAllUsers, deleteUserById, fetchUserDetailsById, updateUserById, Role, User, UpdateUserFormData } from "../../../lib/helpers";
+import { useAuth } from '@/context/AuthContext'; // 1. Importa el hook useAuth
+
+import { fetchAdminRole, fetchAllUsers, deleteUserById, fetchUserDetailsById, updateUserById, Role, User, UpdateUserFormData } from "../../../lib/helpers";
 
 // Importa Recharts
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
@@ -19,7 +21,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 const UserRolePieChart = ({ data }: { data: { name: string; value: number }[] }) => {
   const COLORS = ['#0088FE', '#00C49F']; // Azul para Admin, Verde para User
   return (
-    <div style={{ width: '100%', height: 200 }}>
+    <div style={{ width: '120%', height: 200 }}>
       <ResponsiveContainer>
         <PieChart>
           <Pie
@@ -31,7 +33,7 @@ const UserRolePieChart = ({ data }: { data: { name: string; value: number }[] })
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={({ name, percent }) => `${name} ${((percent as number) * 100).toFixed(0)}%`}
+            label={({ percent }) => ` ${((percent as number) * 100).toFixed(0)}%`}
           >
             {data.map((_, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -82,6 +84,7 @@ const DashboardStats = ({ total, admins, users }: { total: number; admins: numbe
 );
 
 const Dashboard = () => {
+  const { logout } = useAuth(); // 2. Obtén la función logout del contexto
   const navigate = useNavigate(); // Hook para redirigir
   const [isUsersModalOpen, setIsUsersModalOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -158,17 +161,10 @@ const Dashboard = () => {
   // --- MANEJADORES DE EVENTOS ---
   
   const handleLogout = async () => {
-    try {
-      await logoutUser();
-      toast.success("Sesión cerrada exitosamente.");
-      navigate("/");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message || "Error al cerrar sesión.");
-      } else {
-        toast.error("Error al cerrar sesión.");
-      }
-    }
+    // La lógica ahora es mucho más simple y declarativa.
+    await logout(); // Esto se encarga de la API y de actualizar el estado global.
+    toast.success("Sesión cerrada exitosamente.");
+    navigate("/"); // Redirige al home.
   };
   
   const handleDeleteUser = async (userId: string | number, name: string) => {
@@ -262,9 +258,9 @@ const Dashboard = () => {
   };
 
     return (
-      <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
+      <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white overflow-x-hidden p-4">
       <div className={`
-        w-full max-w-7xl mx-auto p-6 space-y-8
+        w-full max-w-7xl mx-auto p-6 space-y-8 my-18
         bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur-sm
         rounded-2xl shadow-xl border border-white/20
         transition-all duration-700 ease-out
@@ -277,8 +273,8 @@ const Dashboard = () => {
             <p className="text-gray-600 dark:text-gray-300">Bienvenido, aquí tienes un resumen de la actividad.</p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button variant="ghost" className='hover:cursor-pointer' onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
-            <Button variant="destructive" className='hover:bg-[#ff3f41] hover:text-accent-foreground dark:hover:bg-accent/50 hover:cursor-pointer' onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
+            <Button className='bg-gradient-to-b from-blue-900 to-gray-900 hover:cursor-pointer' onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
+            <Button className='bg-[#ff3f41] hover:text-[#ff3f41] hover:cursor-pointer' onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
           </div>
         </header>
 

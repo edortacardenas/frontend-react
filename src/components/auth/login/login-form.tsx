@@ -1,6 +1,6 @@
 "use client"
 
-import { toast } from "react-hot-toast"; // Make sure toast is imported and configured
+import { toast } from "react-hot-toast";
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -12,22 +12,24 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Shadcn Dialog
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { loginSchema } from "../../../lib/zod"
 import Spinner from "../../ui/spinner";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '@/context/AuthContext'; // <--- Correctamente importado
 
 import Modal from "../../modals/modal";
 import {
   onSubmitHelper,
   handleVerifyOtpHelper,
   handleResendOtpHelper,
-  OnSubmitHelperResult, // Importar el tipo de resultado
-} from "../../../lib/helpers"; // Ajusta la ruta si es necesario
-//import Social from "../../social/social"
+  OnSubmitHelperResult,
+} from "../../../lib/helpers";
 
 const LoginForm = () => {
+  // 1. Obtienes la función `login` del contexto. ¡Perfecto!
+  const { login } = useAuth(); 
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -45,40 +47,53 @@ const LoginForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    setIsLoading(true); // Establecer isLoading antes de llamar al helper
+    setIsLoading(true);
     const result: OnSubmitHelperResult = await onSubmitHelper({
       values,
       setIsLoading,
       navigate,
-      setEmailState: setEmail, // Pasa el setter del estado email
-      // setShowModal ya no se pasa directamente aquí
+      setEmailState: setEmail,
     });
-    setIsLoading(false); // Restablecer isLoading después de que el helper complete
+    setIsLoading(false);
 
+    // 2. Aquí manejas el caso de login exitoso SIN MFA
     if (result.success && !result.mfaRequired) {
-      // El toast de éxito ya se maneja dentro de onSubmitHelper
+      // ¡ESTE ES EL CAMBIO CLAVE!
+      // Actualiza el estado global de autenticación ANTES de navegar.
+      login(); 
+      
+      // El toast ya se maneja en el helper, así que solo navegamos.
       navigate("/dashboard");
+
     } else if (result.mfaRequired && result.email) {
-      // No es necesario verificar result.success aquí, ya que mfaRequired implica que el login no está completo.
-      // setEmail(result.email); // onSubmitHelper ya llama a setEmailState
-      setShowMethodSelectionModal(true); // Mostrar el modal de selección de método MFA
+      // Si se requiere MFA, el login aún no está completo.
+      // El estado no se actualiza, solo se muestra el modal.
+      setShowMethodSelectionModal(true);
     }
-    // Los errores de inicio de sesión sin MFA ya son manejados con toasts por onSubmitHelper.
+    // Los errores ya son manejados por el helper.
   }
 
   async function handleVerifyOtp() {
-    await handleVerifyOtpHelper({ email, otp, setShowModal, navigate, setOtp });
+    // 3. Pasamos la función `login` al helper de verificación.
+    //    Esto permitirá al helper actualizar el estado global DESPUÉS de una verificación de OTP exitosa.
+    await handleVerifyOtpHelper({ 
+        email, 
+        otp, 
+        setShowModal, 
+        navigate, 
+        setOtp,
+        login // <-- Pasamos la función `login` aquí
+    });
   }
 
+  // ... (El resto del componente, handleResendOtp, handleForgotPasswordClick, handleSelectVerificationMethod y el JSX, permanecen exactamente igual)
   async function handleResendOtp() {
     handleResendOtpHelper({ email });
   }
 
   const handleForgotPasswordClick = async () => {
-    // Simply navigate to the forgot password page
     navigate('/forgot-password');
   };
-
   const handleSelectVerificationMethod = async (method: "computer" | "movil") => {
     setShowMethodSelectionModal(false); // Close the selection modal
 
@@ -94,9 +109,6 @@ const LoginForm = () => {
           headers: { 
             "Content-Type": "application/json" 
           },
-          // For Scenario 2 (initial verification), this endpoint on the backend
-          // does not use authValid, so credentials: "include" is not strictly
-          // necessary for *this specific call* but kept for consistency.
           credentials: "include", 
           body: JSON.stringify({ email }), // Send email in the body
         });
@@ -127,9 +139,6 @@ const LoginForm = () => {
           headers: { 
             "Content-Type": "application/json" 
           },
-          // For Scenario 2 (initial verification), this endpoint on the backend
-          // does not use authValid, so credentials: "include" is not strictly
-          // necessary for *this specific call* but kept for consistency.
           credentials: "include", 
           body: JSON.stringify({ email }), // Send email in the body
         });
@@ -138,8 +147,7 @@ const LoginForm = () => {
 
         if (response.ok) {
           toast.success(data.msg || "Correo de verificación enviado. Revisa tu bandeja de entrada.");
-          // User now needs to check their email and click the link.
-          // You might want to show a message on the UI or redirect to a "check your email" page.
+          
         } else {
           toast.error(data.msg || "Error al solicitar la verificación por correo.");
         }
@@ -151,7 +159,6 @@ const LoginForm = () => {
       }
     }
   };
-
   return (
     <>
     <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white overflow-x-hidden">
@@ -243,12 +250,6 @@ const LoginForm = () => {
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         
-        {/**  <div className="relative flex justify-center text-xs uppercase ">
-            <h2 className="font-bold text-gray-900 dark:text-white">O continúa con</h2>
-         </div>
-        */  }
-        {/** Social Buttons 
-        <Social/> */}
         <div className="text-center font-bold text-gray-400 text-sm mt-6">
           ¿No tienes una cuenta?{" "}
           <Link to="/register" className="text-blue-300 hover:underline">
