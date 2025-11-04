@@ -254,8 +254,8 @@ import { toast } from "react-hot-toast";
                     ) : (<AiOutlineEye className='w-5 h-5' />)}
                     </button>
           </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
-           hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-900 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
+           hover:from-blue-300 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
             focus:outline-none shadow-md hover:shadow-lg" disabled={isLoading}>
               {isLoading ? <Spinner /> : "Registrarse"}
             </Button>
@@ -271,7 +271,7 @@ import { toast } from "react-hot-toast";
         
         <div className="font-bold text-center text-sm mt-4 text-gray-400 ">
           ¿Ya tienes una cuenta?{" "}
-          <Link to="/login" className="text-cyan-400 hover:underline">
+          <Link to="/login" className="text-blue-300 hover:underline">
             Iniciar sesión
           </Link>
         </div>

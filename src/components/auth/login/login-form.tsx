@@ -160,7 +160,7 @@ const LoginForm = () => {
     <Card className="w-full shadow-lg" style={{background:"transparent"}}>
       <CardHeader className="space-y-1">
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-blue-900 text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
+          <div className="bg-blue-900 text-gray-300 p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
             <Lock className="h-6 w-6 " />
           </div>
           <h2 className="text-3xl font-bold text-gray-400 text-center mb-4">Iniciar sesión</h2>
@@ -233,8 +233,8 @@ const LoginForm = () => {
                 </a>
               </div>
             </div>
-            <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
-           hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-900 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
+           hover:from-blue-300 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
             focus:outline-none shadow-md hover:shadow-lg " disabled={isLoading}>
               {isLoading ? <Spinner/> : "Iniciar sesión"}
             </Button>
@@ -249,9 +249,9 @@ const LoginForm = () => {
         */  }
         {/** Social Buttons 
         <Social/> */}
-        <div className="text-center text-gray-400 text-sm mt-6">
+        <div className="text-center font-bold text-gray-400 text-sm mt-6">
           ¿No tienes una cuenta?{" "}
-          <Link to="/register" className="text-cyan-400 hover:underline">
+          <Link to="/register" className="text-blue-300 hover:underline">
             Regístrate
           </Link>
         </div>
