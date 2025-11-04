@@ -86,7 +86,7 @@ const Home = () => {
           scale: 1,
           mapSamples: 16000,
           mapBrightness: 6,
-          baseColor: [0.3, 0.3, 0.3],
+          baseColor: [0.4, 0.6, 0.9],
           markerColor: [0.1, 0.8, 1],
           glowColor: [0.3, 0.7, 0.9],
           offset: [0, 0],
@@ -179,8 +179,8 @@ const Home = () => {
   return (
     <main className="h-screen w-full bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white overflow-x-hidden p-4">
       {/* Hero Section */}
-      <section className="flex pt-14 pb-12">
-        <div className="w-full">
+      <section className="flex pt-14 pb-12 ">
+        <div className="flex-col md:flex-row items-center justify-between">
           <motion.div
             className="grid md:grid-cols-2 gap-12 items-center"
             variants={containerVariants}
@@ -192,8 +192,8 @@ const Home = () => {
               className="text-center md:text-left"
               variants={itemVariants} // Este contenedor se animará como un solo item
             >
-              <h1 className="text-4xl mb-3 ml-3 font-extrabold md:text-6xl gradient-text-landing">
-                Bienvenido a Nuestra Plataforma
+              <h1 className="text-4xl mb-3 ml-3 font-extrabold md:text-6xl ">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Bienvenido a Nuestra Plataforma </span>
               </h1>
               <p className="text-gray-300 mb-8 ml-4 text-lg md:text-xl">
                 Nos especializamos en proveer la información más actual y relevante a nivel global. Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros lectores.
@@ -236,7 +236,7 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-2">
+      <section className="py-2 px-4">
         <motion.div
           className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
           initial="hidden"
@@ -247,7 +247,7 @@ const Home = () => {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="flex cursor-pointer items-start space-x-4 rounded-xl bg-white/10 p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:bg-gray-700/40"
+              className="flex cursor-pointer items-start space-x-8 rounded-xl bg-white/10 p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:bg-gray-700/40"
               variants={cardVariants} // Cada tarjeta usa su propia variante
             >
               <div className={`flex-shrink-0 ${feature.bgColor} text-white p-3 rounded-full`}>

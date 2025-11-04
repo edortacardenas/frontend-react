@@ -5,7 +5,7 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Lock, Mail, User } from "lucide-react"
+import {Lock, User, Mail } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../modals/modal";
 //import Social from "../../social/social";
 import Spinner from "../../ui/spinner"; // Importar Spinner
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import {
   onRegisterSubmitHelper,
   handleRegisterVerifyOtpHelper,
@@ -26,6 +27,8 @@ import { toast } from "react-hot-toast";
 
  const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [rectPasswordVisible, setRectPasswordVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showMethodSelectionModal, setShowMethodSelectionModal] = useState(false);
   const [otp, setOtp] = useState("");
@@ -149,11 +152,11 @@ import { toast } from "react-hot-toast";
     <Card className="w-full shadow-lg" style={{background:"transparent"}}>
       <CardHeader className="space-y-1">
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-primary text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
+          <div className="bg-blue-900 text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
             <User className="h-6 w-6" />
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">Registro de cuenta</h2>
-          <p className="mt-2 text-sm text-gray-900 dark:text-gray-400 font-bold">
+          <h2 className="text-3xl font-bold text-gray-400 text-center mb-4">Registro de cuenta</h2>
+          <p className="text-gray-400 text-center mb-6">
             Rellena los campos para crear tu cuenta
           </p>
         </div>
@@ -161,71 +164,99 @@ import { toast } from "react-hot-toast";
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className='relative space-y-2  mt-4'>
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="Ingresa tu nombre de usuario" className="pl-10" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormLabel className=' block text-gray-300 font-medium mb-1'>Nombre</FormLabel>
+                <FormControl>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder='johndoe'className="pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none" {...field} />
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-500"/>
+              </FormItem>
               )}
             />
+            </div>
+            <div className='relative space-y-2  mt-4'>
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Correo electrónico</FormLabel>
+                  <FormLabel className=' block text-gray-300 font-medium mb-1 mt-4'>Correo Electronico</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input type="email" placeholder="Ingresa tu correo electrónico" className="pl-10" {...field} />
-                    </div>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder='mail@example.com' type="email" className='pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none'  {...field} />
+                  </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500"/>
                 </FormItem>
               )}
             />
+            </div>
+            <div className='relative space-y-2  mt-4'>
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" placeholder="Crea tu contraseña" className="pl-10" {...field} />
-                    </div>
+                  <FormLabel className=' block text-gray-300 font-medium mb-1'>Contraseña</FormLabel>
+                  <FormControl >
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="**********" type={passwordVisible ? 'text' : 'password'} className='pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none' {...field} />
+                  </div> 
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
+            <button type='button' onClick={() => setPasswordVisible(!passwordVisible)} className=' absolute right-2 top-8.5 text-gray-400 hover:text-cyan-400 focus:outline-none'>
+                    {passwordVisible ? (
+                        <AiOutlineEyeInvisible className='h-5 w-5' />
+                    ) : (<AiOutlineEye className='w-5 h-5' />)}
+                    </button>
+            </div>
+
+            
+            <div className='relative space-y-2  mt-4'>
             <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirmar contraseña</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" placeholder="Confirma tu contraseña" className="pl-10" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            control={form.control}
+            name='confirmPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className=' block text-gray-300 font-medium mb-1'>Re-Enter your password</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="**********" type={rectPasswordVisible ? 'text' : 'password'} className=' pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none' {...field}
+                  />
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-500"/>
+              </FormItem>
+            )}
+          />
+          <button type='button' onClick={() => setRectPasswordVisible(!rectPasswordVisible)} className=' absolute right-2 top-8.5 text-gray-400 hover:text-cyan-400 focus:outline-none'>
+                    {rectPasswordVisible ? (
+                        <AiOutlineEyeInvisible className='h-5 w-5' />
+                    ) : (<AiOutlineEye className='w-5 h-5' />)}
+                    </button>
+          </div>
+            <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
+           hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
+            focus:outline-none shadow-md hover:shadow-lg" disabled={isLoading}>
               {isLoading ? <Spinner /> : "Registrarse"}
             </Button>
           </form>
@@ -238,9 +269,9 @@ import { toast } from "react-hot-toast";
         {/**Social Buttons */}
         {/** <Social/> */ }
         
-        <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
+        <div className="font-bold text-center text-sm mt-4 text-gray-400 ">
           ¿Ya tienes una cuenta?{" "}
-          <Link to="/login" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
+          <Link to="/login" className="text-cyan-400 hover:underline">
             Iniciar sesión
           </Link>
         </div>

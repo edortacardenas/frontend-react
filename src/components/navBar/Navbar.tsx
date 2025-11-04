@@ -4,7 +4,7 @@
 import { Menu } from 'lucide-react';
 
 // Componentes de Shadcn/ui
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -34,11 +34,11 @@ export const Navbar = () => {
     }, []);
 
   return (
-    <nav className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900 text-white">
+    <nav className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900">
       <div className=" mx-auto flex h-6 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo y Nombre del Sitio */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hidden font-bold sm:inline-block">
+          <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hidden font-bold sm:inline-block hover:text-accent-foreground">
             Noticias
           </span>
         </Link>
@@ -53,10 +53,13 @@ export const Navbar = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <div >
-                  <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
-                    <Link to="/login">Get Starter</Link>
+                <div className='flex '>
+                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-accent-foreground" size="lg">
+                    <Link to="/login">Login</Link>
                   </Button>
+                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-accent-foreground" size="lg">
+                      <Link to="/register">Register</Link>
+                    </Button>
                 </div>
               </div>
             )}
@@ -64,11 +67,11 @@ export const Navbar = () => {
         </div>
 
         {/* Botón de Menú Móvil (Visible solo en móvil) */}
-        <div className="md:hidden">
+        <div className="md:hidden flex justify-end">
           <Sheet>
-            <SheetTrigger asChild>
+            <SheetTrigger asChild >
               <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6 " />
+                <Menu className="h-8 w-8 " />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900 text-white">
@@ -76,7 +79,7 @@ export const Navbar = () => {
                 <SheetTitle>
                 <SheetTrigger asChild>
                    <Link to="/" className="flex items-center gap-2">
-                    <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b]">Home</span>
+                    <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">Home</span>
                   </Link>
                   </SheetTrigger>
                 </SheetTitle>
@@ -87,7 +90,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                   {isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild variant="ghost" className={buttonVariants({ variant: 'ghost', size: 'lg', className: 'w-full rounded-full bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90 px-8 py-6 text-lg' })}>
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
                       <Link to="/dashboard">Dashboard</Link>
                     </Button>
                     </SheetTrigger>
@@ -97,7 +100,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                     {!isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild variant="ghost" className={buttonVariants({ variant: 'ghost', size: 'lg', className: 'w-full rounded-full bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90 px-8 py-6 text-lg' })}>
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
                       <Link to="/login">Register</Link>
                     </Button>
                     </SheetTrigger>
@@ -107,7 +110,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                   {!isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild variant="ghost" className={buttonVariants({ variant: 'ghost', size: 'lg', className: 'w-full rounded-full bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90 px-8 py-6 text-lg' })}>
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
                       <Link to="/login">Login</Link>
                     </Button>
                     </SheetTrigger>
@@ -117,7 +120,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                     {isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild variant="ghost" className={buttonVariants({ variant: 'ghost', size: 'lg', className: 'w-full rounded-full bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90 px-8 py-6 text-lg' })}>
+                    <Button asChild className='bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]'>
                       <Link to="/noticias">News</Link>
                     </Button>
                     </SheetTrigger>

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Lock, User } from "lucide-react"
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -28,6 +29,7 @@ import {
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showMethodSelectionModal, setShowMethodSelectionModal] = useState(false);
   const [otp, setOtp] = useState("");
@@ -158,11 +160,11 @@ const LoginForm = () => {
     <Card className="w-full shadow-lg" style={{background:"transparent"}}>
       <CardHeader className="space-y-1">
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-primary text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
-            <Lock className="h-6 w-6" />
+          <div className="bg-blue-900 text-primary-foreground p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
+            <Lock className="h-6 w-6 " />
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">Iniciar sesión</h2>
-          <p className="mt-2 text-sm text-gray-900 dark:text-gray-400 font-bold">
+          <h2 className="text-3xl font-bold text-gray-400 text-center mb-4">Iniciar sesión</h2>
+          <p className="text-gray-400 text-center mb-6">
             Ingresa tus credenciales para acceder a tu cuenta
           </p>
         </div>
@@ -170,38 +172,50 @@ const LoginForm = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className='relative space-y-2  mt-4'>
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-900 dark:text-white">Email</FormLabel>
+                  <FormLabel className="block text-gray-300 font-medium mb-1">Email</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="Ingresa tu nombre de usuario" className="pl-10" {...field} />
+                      <Input placeholder="Ingresa tu nombre de usuario" className="pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none" {...field} />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500"/>
                 </FormItem>
               )}
             />
+            </div>
+
+            <div className='relative space-y-2  mt-4'>
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-900 dark:text-white">Contraseña</FormLabel>
+                  <FormLabel className="block text-gray-300 font-medium mb-1">Contraseña</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" placeholder="Ingresa tu contraseña" className="pl-10" {...field} />
+                      <Input type={passwordVisible ? 'text' : 'password'} placeholder="Ingresa tu contraseña" className="pl-10 border-b
+                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none" {...field} />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500"/>
                 </FormItem>
               )}
             />
+            <button type='button' onClick={() => setPasswordVisible(!passwordVisible)} className=' absolute right-2 top-8.5 text-gray-400 hover:text-cyan-400 focus:outline-none'>
+                    {passwordVisible ? (
+                        <AiOutlineEyeInvisible className='h-5 w-5' />
+                    ) : (<AiOutlineEye className='w-5 h-5' />)}
+                    </button>
+            </div>
             {/* Fila para "¿Olvidaste tu contraseña?" alineado a la derecha */}
             <div className="flex items-center justify-end">
               <div className="text-sm">
@@ -213,13 +227,15 @@ const LoginForm = () => {
                       handleForgotPasswordClick();
                     }
                   }}
-                  className={`font-medium text-gray-900 dark:text-white hover:text-primary/80 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+                  className={`font-medium text-gray-300 hover:text-primary/80 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
                 >
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
             </div>
-            <Button type="submit" className="w-full " disabled={isLoading}>
+            <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-2 mt-8 rounded-lg hover:bg-gradient-to-l
+           hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 focus:ring focus:ring-cyan-300
+            focus:outline-none shadow-md hover:shadow-lg " disabled={isLoading}>
               {isLoading ? <Spinner/> : "Iniciar sesión"}
             </Button>
           </form>
@@ -233,9 +249,9 @@ const LoginForm = () => {
         */  }
         {/** Social Buttons 
         <Social/> */}
-        <div className="font-bold text-center text-sm mt-4 text-gray-900 dark:text-white">
+        <div className="text-center text-gray-400 text-sm mt-6">
           ¿No tienes una cuenta?{" "}
-          <Link to="/register" className="font-bold text-gray-900 dark:text-white hover:text-primary/80">
+          <Link to="/register" className="text-cyan-400 hover:underline">
             Regístrate
           </Link>
         </div>
