@@ -43,9 +43,13 @@ interface OnRegisterSubmitHelperArgs {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Podríamos reutilizar HandleOtpArgs y HandleResendOtpArgs si la lógica es idéntica
-// o crear unas nuevas si hay diferencias sutiles. Por claridad, las defino aunque sean iguales por ahora.
-interface HandleRegisterVerifyOtpHelperArgs extends HandleOtpArgs {}
+interface HandleRegisterVerifyOtpHelperArgs {
+  email: string;
+  otp: string;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  navigate: NavigateFunction;
+  setOtp: React.Dispatch<React.SetStateAction<string>>;
+}
 interface HandleRegisterResendOtpHelperArgs extends HandleResendOtpArgs {}
 
 interface AuthStatusResponse {
