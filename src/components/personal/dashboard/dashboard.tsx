@@ -19,7 +19,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 
 // --- SUB-COMPONENTE: GRÁFICO DE ROLES ---
 const UserRolePieChart = ({ data }: { data: { name: string; value: number }[] }) => {
-  const COLORS = ['#0088FE', '#00C49F']; // Azul para Admin, Verde para User
+  const COLORS = ['#0147ae', '#00C49F']; // Azul para Admin, Verde para User
   return (
     <div style={{ width: '120%', height: 200 }}>
       <ResponsiveContainer>
@@ -30,7 +30,7 @@ const UserRolePieChart = ({ data }: { data: { name: string; value: number }[] })
             cy="50%"
             labelLine={false}
             outerRadius={80}
-            fill="#8884d8"
+            fill="#d4dbff"
             dataKey="value"
             nameKey="name"
             label={({ percent }) => ` ${((percent as number) * 100).toFixed(0)}%`}
@@ -52,32 +52,32 @@ const DashboardStats = ({ total, admins, users }: { total: number; admins: numbe
   <div className="grid gap-6 md:grid-cols-3">
     <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Total de Usuarios</CardTitle>
-        <Users className="h-4 w-4 text-muted-foreground" />
+        <CardTitle className="text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Total de Usuarios</CardTitle>
+        <Users className="h-4 w-4 text-[#0147ae]" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{total}</div>
-        <p className="text-xs text-muted-foreground">Usuarios registrados en el sistema</p>
+        <p className="text-xs text-muted-foreground font-medium">Usuarios registrados en el sistema</p>
       </CardContent>
     </Card>
     <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Administradores</CardTitle>
-        <UserCog className="h-4 w-4 text-muted-foreground" />
+        <CardTitle className="text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Administradores</CardTitle>
+        <UserCog className="h-4 w-4 text-[#0147ae]" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{admins}</div>
-        <p className="text-xs text-muted-foreground">Cuentas con privilegios elevados</p>
+        <p className="text-xs text-muted-foreground font-medium">Cuentas con privilegios elevados</p>
       </CardContent>
     </Card>
     <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Usuarios Estándar</CardTitle>
-        <UserCheck className="h-4 w-4 text-muted-foreground" />
+        <CardTitle className="text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Usuarios Estándar</CardTitle>
+        <UserCheck className="h-4 w-4 text-[#0147ae]" />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{users}</div>
-        <p className="text-xs text-muted-foreground">Cuentas con permisos regulares</p>
+        <p className="text-xs text-muted-foreground font-medium">Cuentas con permisos regulares</p>
       </CardContent>
     </Card>
   </div>
@@ -269,12 +269,12 @@ const Dashboard = () => {
         {/* Encabezado del Dashboard */}
         <header className="flex flex-col sm:flex-row items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Dashboard de Control</h1>
-            <p className="text-gray-600 dark:text-gray-300">Bienvenido, aquí tienes un resumen de la actividad.</p>
+            <h1 className="text-3xl font-bold md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Dashboard de Control</h1>
+            <p className="text-gray-600 dark:text-gray-300 font-bold">Bienvenido, aquí tienes un resumen de la actividad.</p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button className='bg-gradient-to-b from-blue-900 to-gray-900 hover:cursor-pointer' onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
-            <Button className='bg-[#ff3f41] hover:text-[#ff3f41] hover:cursor-pointer' onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
+            <Button variant="ghost" className='bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground' onClick={() => navigate("/")}><Home className="h-4 w-4"/>Home</Button>
+            <Button variant="ghost" className='bg-[#ff3f41] hover:text-[#ff3f41] hover:cursor-pointer' onClick={handleLogout}><LogOut className="h-4 w-4"/> Salir</Button>
           </div>
         </header>
 
@@ -290,24 +290,24 @@ const Dashboard = () => {
           {isAdmin && (
             <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => setIsUsersModalOpen(true)}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm font-medium" > Administrar Usuarios</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="flex items-center gap-2 text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]" > Administrar Usuarios</CardTitle>
+                <Users className="h-4 w-4 text-[#0147ae]" />
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">Visualiza, edita y elimina usuarios del sistema.</p>
-                <Button className="w-full">Gestionar</Button>
+                <p className="text-sm text-muted-foreground font-medium mb-4">Visualiza, edita y elimina usuarios del sistema.</p>
+                <Button variant="ghost" className='w-full bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground'>Gestionar</Button>
               </CardContent>
             </Card>
           )}
 
           <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => navigate("/noticias")}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium"> Ver Noticias</CardTitle>
-              <Newspaper className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="flex items-center gap-2 text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]"> Ver Noticias</CardTitle>
+              <Newspaper className="h-4 w-4 text-[#0147ae]" />
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">Conéctate a la API y consulta las últimas noticias.</p>
-              <Button className="w-full" >
+              <p className="text-sm text-muted-foreground font-medium mb-4">Conéctate a la API y consulta las últimas noticias.</p>
+              <Button variant="ghost" className='w-full bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground' >
                 Ir a Noticias
               </Button>
             </CardContent>
@@ -315,26 +315,26 @@ const Dashboard = () => {
 
           <Card className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-lg transition-transform duration-300 hover:scale-105 hover:cursor-pointer" onClick={() => navigate("/config")}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium"> Configuración</CardTitle>
-              <Settings className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="flex items-center gap-2 text-xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]"> Configuración</CardTitle>
+              <Settings className="h-4 w-4 text-[#0147ae]" />
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">Ajusta la configuración de tu perfil y preferencias.</p>
-              <Button className="w-full">Configurar Cuenta</Button>
+              <p className="text-sm text-muted-foreground font-medium mb-4">Ajusta la configuración de tu perfil y preferencias.</p>
+              <Button variant="ghost" className='w-full bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground'>Configurar Cuenta</Button>
             </CardContent>
           </Card>
         </div>
 
         {/* Modales (su JSX podría estar en sus propios componentes) */}
         <Dialog open={isUsersModalOpen} onOpenChange={setIsUsersModalOpen}>
-            <DialogContent className="sm:max-w-[800px] bg-white dark:bg-gray-800">
+            <DialogContent className="sm:max-w-[800px] bg-[#d4dbff] dark:bg-gray-800">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl">Administrar Usuarios</DialogTitle>
+                    <DialogTitle className="text-2xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Administrar Usuarios</DialogTitle>
                     <DialogDescription>Gestiona los usuarios registrados y visualiza las estadísticas de roles.</DialogDescription>
                 </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 max-h-[70vh]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 max-h-[70vh] ">
                     {/* Columna de Gráfico */}
-                    <div className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div className="flex flex-col items-center justify-center p-4 bg-[#d4dbff] rounded-lg">
                         <h3 className="text-lg font-semibold mb-2">Distribución de Roles</h3>
                         {users.length > 0 ? <UserRolePieChart data={chartData} /> : <p>No hay datos para mostrar.</p>}
                     </div>
@@ -345,14 +345,14 @@ const Dashboard = () => {
                     ) : users.length > 0 ? (
                         <ul className="space-y-3">
                         {users.map((user) => (
-                            <li key={user.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                            <li key={user.id} className="flex items-center justify-between p-3 bg-[#d4dbff] rounded-md">
                                 <div>
                                     <p className="font-medium">{user.name}</p>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
                                 </div>
                                 <div className="flex space-x-2">
-                                    <Button variant="outline" size="icon" onClick={() => openUpdateUserModal(user)}><Edit3 className="h-4 w-4"/></Button>
-                                    <Button variant="destructive" size="icon" onClick={() => handleDeleteUser(user.id, user.name)}><Trash2 className="h-4 w-4"/></Button>
+                                    <Button variant="ghost" className='bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-white' size="icon" onClick={() => openUpdateUserModal(user)}><Edit3 className="h-4 w-4"/></Button>
+                                    <Button variant="ghost" className='bg-[#ff3f41] hover:text-[#ff3f41] hover:cursor-pointer' size="icon" onClick={() => handleDeleteUser(user.id, user.name)}><Trash2 className="h-4 w-4"/></Button>
                                 </div>
                             </li>
                         ))}
@@ -361,7 +361,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <DialogClose asChild><Button type="button" variant="secondary">Cerrar</Button></DialogClose>
+                    <DialogClose asChild><Button variant="ghost" className='bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-white'>Cerrar</Button></DialogClose>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

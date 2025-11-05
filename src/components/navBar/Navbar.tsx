@@ -20,11 +20,11 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <nav className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900">
+    <nav className="sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-black  to-blue-900">
       <div className=" mx-auto flex h-6 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo y Nombre del Sitio */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hidden font-bold sm:inline-block hover:text-accent-foreground">
+          <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff] hidden font-bold sm:inline-block">
             Noticias
           </span>
         </Link>
@@ -33,17 +33,17 @@ export const Navbar = () => {
         <div className="hidden items-center gap-4 md:flex">
         {isAuthenticated ? (
               <div  className="w-2/5">
-                <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
+                <Button asChild variant="ghost" className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]" size="lg">
                   <Link to="/dashboard">Dashboard</Link>
                 </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div className='flex '>
-                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-accent-foreground" size="lg">
+                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]" size="lg">
                     <Link to="/login">Login</Link>
                   </Button>
-                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-accent-foreground" size="lg">
+                  <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]" size="lg">
                       <Link to="/register">Register</Link>
                     </Button>
                 </div>
@@ -57,15 +57,15 @@ export const Navbar = () => {
           <Sheet>
             <SheetTrigger asChild >
               <Button variant="ghost" size="icon">
-                <Menu className="h-8 w-8 " />
+                <Menu className="h-8 w-8 text-[#d4dbff] " />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-[#0147ae] via-[#d4dbff] to-gray-900 text-white">
+            <SheetContent side="right" className="w-[300px] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white">
               <SheetHeader className="text-right mb-4">
                 <SheetTitle>
                 <SheetTrigger asChild>
                    <Link to="/" className="flex items-center gap-2">
-                    <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">Home</span>
+                    <span className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff]  to-[#0147ae] hover:text-[#d4dbff]">Home</span>
                   </Link>
                   </SheetTrigger>
                 </SheetTitle>
@@ -76,7 +76,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                   {isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]">
                       <Link to="/dashboard">Dashboard</Link>
                     </Button>
                     </SheetTrigger>
@@ -86,7 +86,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                     {!isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]">
                       <Link to="/login">Register</Link>
                     </Button>
                     </SheetTrigger>
@@ -96,7 +96,7 @@ export const Navbar = () => {
                   <div className="grid grid-cols-1 gap-4">
                   {!isAuthenticated &&
                   <SheetTrigger asChild>
-                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#001a4b] via-[#d8dce2] to-[#001a4b]">
+                    <Button asChild className="bg-clip-text text-transparent text-xl bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:text-[#d4dbff]">
                       <Link to="/login">Login</Link>
                     </Button>
                     </SheetTrigger>

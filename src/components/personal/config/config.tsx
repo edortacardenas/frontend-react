@@ -229,16 +229,16 @@ const Config = () => {
       `}>
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Configuración de Perfil</h2>
         <div className="space-y-4">
-        <Button onClick={() => openModal("update")} className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
+        <Button onClick={() => openModal("update")} variant="ghost" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02] bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground">
             Actualizar Perfil
           </Button>
-          <Button onClick={() => openModal("delete")} variant="destructive" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
+          <Button onClick={() => openModal("delete")} variant="ghost" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02] bg-[#ff3f41] hover:text-[#ff3f41] hover:cursor-pointer">
             Eliminar Perfil
           </Button>
-          <Button onClick={() => setIsChangePasswordModalOpen(true)} variant="outline" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02]">
+          <Button onClick={() => setIsChangePasswordModalOpen(true)} variant="ghost" className="w-full transition-transform duration-150 ease-in-out hover:scale-[1.02] bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground">
             Cambiar contraseña
           </Button>
-          <Button  onClick={handleCancelAndRedirect} variant="default" className="w-full">
+          <Button  onClick={handleCancelAndRedirect} variant="ghost" className="w-full bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-accent-foreground">
             Cancelar
           </Button>
         </div>

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "react-hot-toast";
@@ -12,7 +12,7 @@ import { getNewsFetch, Article } from "@/services/newsService";
 import { Loader2, AlertTriangle, Newspaper, ArrowLeft, Search } from "lucide-react";
 
 // --- TIPOS Y CONSTANTES ---
-const NEWS_PER_PAGE = 30; // Datos con los que trabajar en el cliente
+const NEWS_PER_PAGE = 20; // Datos con los que trabajar en el cliente
 const SORT_OPTIONS = {
   PUBLISHED_AT: 'publishedAt',
   RELEVANCY: 'relevancy',
@@ -36,24 +36,24 @@ const SortAndSearchControls: React.FC<{
 }> = ({ sortBy, searchQuery, onSortChange, onSearchChange }) => (
   <div className="flex flex-col sm:flex-row gap-4 mb-8">
     <div className="relative flex-grow">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-900" />
       <Input
         type="text"
         placeholder="Buscar por palabra clave..."
         value={searchQuery}
         onChange={onSearchChange}
-        className="pl-10 w-full dark:bg-slate-800 dark:text-slate-100"
+        className="pl-10 w-full text-blue-900"
       />
     </div>
     <div className="flex-shrink-0 w-full sm:w-48">
       <Select value={sortBy} onValueChange={onSortChange}>
-        <SelectTrigger className="dark:bg-slate-800 dark:text-slate-100">
+        <SelectTrigger className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-[#0147ae]">
           <SelectValue placeholder="Ordenar por..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={SORT_OPTIONS.PUBLISHED_AT}>Fecha de publicación</SelectItem>
-          <SelectItem value={SORT_OPTIONS.RELEVANCY}>Relevancia</SelectItem>
-          <SelectItem value={SORT_OPTIONS.POPULARITY}>Popularidad de la fuente</SelectItem>
+          <SelectItem className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-[#0147ae]" value={SORT_OPTIONS.PUBLISHED_AT}>Fecha de publicación</SelectItem>
+          <SelectItem className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-[#0147ae]" value={SORT_OPTIONS.RELEVANCY}>Relevancia</SelectItem>
+          <SelectItem className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-[#0147ae]" value={SORT_OPTIONS.POPULARITY}>Popularidad de la fuente</SelectItem>
         </SelectContent>
       </Select>
     </div>
@@ -65,7 +65,7 @@ const SortAndSearchControls: React.FC<{
  */
 const NewsColumn: React.FC<{ title: string; articles: Article[] }> = ({ title, articles }) => (
     <aside className="lg:col-span-1 flex flex-col gap-4">
-      <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 pb-2 border-b-2 border-blue-600 dark:border-blue-500">
+      <h2 className="text-2xl font-bold dark:text-slate-100 pb-2 border-b-2   bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-900">
         {title}
       </h2>
       {articles.length > 0 ? (
@@ -187,16 +187,16 @@ const Noticias: React.FC = () => {
   const rightSidebarNews = processedArticles.slice(12, 20);
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 bg-[url('/noticias-home.webp')] bg-cover bg-center bg-no-repeat">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white overflow-x-hidden p-4">
       <div className="container mx-auto p-4 sm:p-6 lg:p-8 bg-slate-100/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-lg shadow-2xl w-full max-w-screen-2xl overflow-y-auto max-h-[calc(100vh-theme(spacing.12))] custom-scrollbar-transparent">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-slate-300 dark:border-slate-700">
           <div className="flex items-center mb-4 sm:mb-0">
-            <Newspaper className="h-10 w-10 text-blue-600 mr-3" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-slate-100">
+            <Newspaper className="h-10 w-10 text-blue-300 mr-3" />
+            <h1 className="text-3xl font-bold sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-900">
               Noticias del Día
             </h1>
           </div>
-          <Button onClick={() => navigate('/dashboard')} variant="outline" className="w-full sm:w-auto dark:text-slate-100 dark:border-slate-600 dark:hover:bg-slate-700">
+          <Button onClick={() => navigate('/dashboard')} variant="ghost" className="w-full sm:w-auto bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-white">
             <ArrowLeft className="mr-2 h-4 w-4" /> Volver al Dashboard
           </Button>
         </header>
@@ -216,10 +216,9 @@ const Noticias: React.FC = () => {
         )}
 
         {error && articles.length === 0 && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className='bg-transparent'>
             <AlertTriangle className="h-5 w-5" />
-            <AlertTitle>Fallo al Cargar Noticias</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertTitle>Fallo al Cargar las Noticias revise su conexion</AlertTitle>
           </Alert>
         )}
 
@@ -228,7 +227,7 @@ const Noticias: React.FC = () => {
             <NewsColumn title="Noticias" articles={leftSidebarNews} />
 
             <main className="lg:col-span-2 flex flex-col gap-6">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 pb-2 border-b-2 border-blue-600 dark:border-blue-500">
+              <h2 className="text-2xl font-bold  pb-2 border-b-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-900">
                 Noticias Destacadas
               </h2>
               {mainNews.map((article) => (
@@ -248,7 +247,7 @@ const Noticias: React.FC = () => {
                       <p>{article.description || 'No hay descripción disponible.'}</p>
                     </CardContent>
                     <CardFooter>
-                      <Button asChild variant="link" className="p-0 h-auto text-blue-600 dark:text-blue-400 font-semibold">
+                      <Button asChild variant="link" className="p-0 h-auto text-blue-900 dark:text-blue-400 font-semibold">
                         <a href={article.url} target="_blank" rel="noopener noreferrer">Leer más &rarr;</a>
                       </Button>
                     </CardFooter>
@@ -259,7 +258,7 @@ const Noticias: React.FC = () => {
             <NewsColumn title="Más para leer" articles={rightSidebarNews} />
           </div>
         ) : !isLoading && (
-            <div className="text-center col-span-1 lg:col-span-4 py-10 bg-slate-200/50 dark:bg-slate-800/50 rounded-lg">
+            <div className="text-center col-span-1 lg:col-span-4 py-10 bg-transparent rounded-lg">
                 <p className="text-xl text-slate-600 dark:text-slate-300">No se encontraron noticias que coincidan con tu búsqueda.</p>
                 <p className="text-slate-500 dark:text-slate-400 mt-2">Intenta con otra palabra clave o ajusta los filtros.</p>
             </div>
@@ -267,7 +266,7 @@ const Noticias: React.FC = () => {
         
         {hasMoreNews && (
           <div className="text-center mt-12">
-            <Button onClick={handleLoadMore} disabled={isLoadingMore} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600">
+            <Button onClick={handleLoadMore} disabled={isLoadingMore} variant="ghost" size="lg" className="bg-gradient-to-r from-blue-300 to-blue-900 hover:cursor-pointer hover:text-white">
               {isLoadingMore ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Cargando...</> : 'Cargar más noticias'}
             </Button>
           </div>

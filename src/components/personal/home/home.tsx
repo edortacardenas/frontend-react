@@ -87,7 +87,7 @@ const Home = () => {
           scale: 1,
           mapSamples: 16000,
           mapBrightness: 6,
-          baseColor: [0.4, 0.6, 0.9],
+          baseColor: [0.3, 0.3, 0.9],
           markerColor: [0.1, 0.8, 1],
           glowColor: [0.3, 0.7, 0.9],
           offset: [0, 0],
@@ -184,23 +184,23 @@ const Home = () => {
               className="text-center md:text-left"
               variants={itemVariants} // Este contenedor se animará como un solo item
             >
-              <h1 className="text-4xl mb-3 ml-3 font-extrabold md:text-6xl ">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae]">Bienvenido a Nuestra Plataforma </span>
+              <h1 className="text-4xl mb-3 ml-3 font-extrabold md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-[#d4dbff] to-[#0147ae] ">
+               Bienvenido a Nuestra Plataforma 
               </h1>
-              <p className="text-gray-300 mb-8 ml-4 text-lg md:text-xl">
+              <p className="bg-clip-text text-[#d4dbff] mb-8 ml-4 text-lg md:text-xl">
                 Nos especializamos en proveer la información más actual y relevante a nivel global. Nuestro equipo está comprometido con la excelencia y la satisfacción de nuestros lectores.
               </p>
               <div className="px-3 flex justify-center md:justify-start gap-4">
                 {isAuthenticated ? (
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-2/5">
-                    <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
+                    <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg text-[#d4dbff] bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
                       <Link to="/dashboard">Dashboard</Link>
                     </Button>
                   </motion.div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
+                      <Button asChild variant="ghost" className="rounded-full px-8 py-6 text-lg text-[#d4dbff] bg-gradient-to-r from-[#d4dbff] via-[#0147ae] to-[#001a4b] hover:opacity-90" size="lg">
                         <Link to="/login">Get Started</Link>
                       </Button>
                     </motion.div>
@@ -213,7 +213,7 @@ const Home = () => {
             <motion.div className="hidden md:block" variants={itemVariants}>
               <div className="flex justify-center items-center">
                 <div className="relative max-w-[500px] aspect-square">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full blur-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#d4dbff]/30 to-[#0147ae]/30 rounded-full blur-3xl"></div>
                   <canvas
                     id="cobe"
                     width="500"
@@ -239,15 +239,15 @@ const Home = () => {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="flex cursor-pointer items-start space-x-8 rounded-xl bg-white/10 p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:bg-gray-700/40"
+              className="flex cursor-pointer items-start space-x-8 rounded-xl bg-[#0147ae]/30 p-6 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:bg-gray-700/40"
               variants={cardVariants} // Cada tarjeta usa su propia variante
             >
-              <div className={`flex-shrink-0 ${feature.bgColor} text-white p-3 rounded-full`}>
+              <div className={`flex-shrink-0 ${feature.bgColor} text-[#d4dbff] p-3 rounded-full`}>
                 {feature.icon}
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                <p className="font-semibold text-gray-300 mt-1">{feature.description}</p>
+                <h3 className="text-xl font-semibold bg-clip-text text-[#d4dbff]">{feature.title}</h3>
+                <p className="font-semibold bg-clip-text text-[#d4dbff] mt-1">{feature.description}</p>
               </div>
             </motion.div>
           ))}
