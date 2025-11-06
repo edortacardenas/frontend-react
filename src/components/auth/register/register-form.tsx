@@ -170,12 +170,11 @@ import { toast } from "react-hot-toast";
               name="name"
               render={({ field }) => (
                 <FormItem>
-                <FormLabel className=' block text-gray-300 font-medium mb-1'>Nombre</FormLabel>
+                <FormLabel className=' block text-gray-300 font-medium mb-1 mt-4'>Nombre</FormLabel>
                 <FormControl>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder='johndoe'className="pl-10 border-b
-                    border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none" {...field} />
+                  <Input placeholder='johndoe'className='pl-10 border-b border-gray-600 bg-transparent text-white focus:border-cyan-400 focus:outline-none' {...field} />
                   </div>
                 </FormControl>
                 <FormMessage className="text-red-500"/>
