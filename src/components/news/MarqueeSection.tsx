@@ -56,7 +56,7 @@ export const MarqueeSection = () => {
 
         <Marquee
           gradient={true}
-          gradientColor={[8, 13, 27]}
+          gradientColor="rgba(8, 13, 27, 0)"
           gradientWidth={150}
           speed={40}
           pauseOnHover={true}
