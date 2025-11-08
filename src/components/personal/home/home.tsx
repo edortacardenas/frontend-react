@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion, Variants, cubicBezier } from "framer-motion";
 import { Button } from "@/components/ui/button"; // Asegúrate que la ruta sea correcta
 //import { fetchAuthStatus } from "../../../lib/helpers"; // Import the new helper function
 import { useAuth } from "@/context/AuthContext";
+import { MarqueeSection } from "@/components/news/MarqueeSection";
+import { Globe } from "@/components/Globe";
 
 // Array de características sin cambios
 const features = [
@@ -53,73 +55,6 @@ const features = [
 
 const Home = () => {
   const { isAuthenticated } = useAuth(); // Usa el contexto
-  const [rezizeglove, setRezizeGlove] = useState(1000);
-
-  // useEffect para el manejo del globo y la autenticación (sin cambios)
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      const newSize = width < 590 ? Math.floor(width * 1.5) : 1000;
-      setRezizeGlove(newSize);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    const globeScript = document.createElement('script');
-    globeScript.type = 'module';
-    globeScript.textContent = `
-      import createGlobe from 'https://cdn.skypack.dev/cobe';
-      let phi = 0;
-      let canvas = document.getElementById("cobe");
-      if (canvas && !canvas.getAttribute('data-globe-initialized')) {
-        canvas.setAttribute('data-globe-initialized', 'true');
-        const globe = createGlobe(canvas, {
-          devicePixelRatio: 2,
-          width: ${rezizeglove},
-          height: ${rezizeglove},
-          phi: 0,
-          theta: 0,
-          dark: 1,
-          diffuse: 1.2,
-          scale: 1,
-          mapSamples: 16000,
-          mapBrightness: 6,
-          baseColor: [0.3, 0.3, 0.9],
-          markerColor: [0.1, 0.8, 1],
-          glowColor: [0.3, 0.7, 0.9],
-          offset: [0, 0],
-          markers: [
-            { location: [37.7595, -122.4367], size: 0.03 },
-            { location: [40.7128, -74.006], size: 0.1 },
-            { location: [51.5074, -0.1278], size: 0.05 },
-            { location: [35.6762, 139.6503], size: 0.05 },
-            { location: [22.3193, 114.1694], size: 0.03 },
-            { location: [-33.8688, 151.2093], size: 0.03 },
-          ],
-          onRender: (state) => {
-            state.phi = phi;
-            phi += 0.005;
-          },
-        });
-      }
-    `;
-    document.body.appendChild(globeScript);
-    return () => {
-      const scripts = document.querySelectorAll('script[type="module"]');
-      scripts.forEach(s => {
-        if (s.textContent && s.textContent.includes('createGlobe')) {
-          s.remove();
-        }
-      });
-      const canvas = document.getElementById("cobe");
-      if (canvas) {
-        canvas.removeAttribute('data-globe-initialized');
-      }
-    };
-  }, [rezizeglove]);
 
   useEffect(() => {
    
@@ -172,13 +107,12 @@ const Home = () => {
     <main className="h-screen w-full bg-gradient-to-b from-black via-blue-900 to-gray-900 text-white overflow-x-hidden p-4">
       {/* Hero Section */}
       <section className="flex pt-14 pb-12 ">
-        <div className="flex-col md:flex-row items-center justify-between">
-          <motion.div
-            className="grid md:grid-cols-2 gap-12 items-center"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+        <motion.div
+          className="flex flex-col-reverse gap-12 items-center md:grid md:grid-cols-2 md:gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
             {/* --- Text Content --- */}
             <motion.div
               className="text-center md:text-left"
@@ -210,21 +144,20 @@ const Home = () => {
             </motion.div>
             
             {/* --- Globe Visualization --- */}
-            <motion.div className="hidden md:block" variants={itemVariants}>
-              <div className="flex justify-center items-center">
-                <div className="relative max-w-[500px] aspect-square">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#d4dbff]/30 to-[#0147ae]/30 rounded-full blur-3xl"></div>
-                  <canvas
-                    id="cobe"
-                    width="500"
-                    height="500"
-                    className="relative z-10 w-full h-full"
-                  ></canvas>
-                </div>
+          <motion.div 
+            className="flex items-center justify-center w-full h-full" 
+            variants={itemVariants}
+          >
+            <div className="relative w-full max-w-[500px] aspect-square">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#d4dbff]/30 to-[#0147ae]/30 rounded-full blur-3xl"></div>
+              {/* 3. REEMPLAZA EL CANVAS CON EL COMPONENTE GLOBE */}
+              <div className="relative z-10 w-full h-full">
+                <Globe />
               </div>
-            </motion.div>
+            </div>
           </motion.div>
-        </div>
+        </motion.div>
+       
       </section>
 
       {/* Features Section */}
@@ -253,6 +186,7 @@ const Home = () => {
           ))}
         </motion.div>
       </section>
+      <MarqueeSection />
     </main>
   );
 };
