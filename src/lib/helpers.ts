@@ -81,7 +81,6 @@ export interface UpdateUserFormData {
 
 export const onSubmitHelper = async ({
   values,
-  setIsLoading,
   navigate,
   setEmailState,
 }: OnSubmitHelperArgs): Promise<OnSubmitHelperResult> => {
