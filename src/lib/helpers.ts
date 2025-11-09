@@ -93,9 +93,10 @@ export const onSubmitHelper = async ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        secure: "true",
       },
       body: JSON.stringify(values),
-      credentials: "include",
+      credentials: "include", // Asegura que las cookies se envíen con la solicitud
     });
 
     const data = await response.json();
