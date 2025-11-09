@@ -84,22 +84,23 @@ export const onSubmitHelper = async ({
   setIsLoading,
   navigate,
   setEmailState,
-  // setShowModal, // No longer used here
 }: OnSubmitHelperArgs): Promise<OnSubmitHelperResult> => {
-  console.log(typeof(navigate))
   try {
-    setIsLoading(true);
+    // isLoading se maneja mejor en el componente que llama a la función.
+    // setIsLoading(true); // Comentado o eliminado para dar control al componente.
+
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(values),
-      credentials: "include", // Asegura que las cookies se envíen con la solicitud
+      credentials: "include",
     });
 
     const data = await response.json();
-    if (response.status === 200) {
+
+    if (response.ok) { // response.ok comprueba si el status está en el rango 200-299
       toast.success("Inicio de sesión exitoso");
       return { 
         success: true, 
@@ -109,25 +110,43 @@ export const onSubmitHelper = async ({
         login: () => {} 
       };
     } else {
+      // --- INICIO DE LA LÓGICA CORREGIDA ---
       const errorMessage = data.msg?.msg || data.msg || "Error desconocido en el inicio de sesión.";
-      toast.error("Error: " + errorMessage);
-      // Check if the error message indicates OTP verification is needed
+
+      // CAMBIO CLAVE: PRIMERO, revisamos si el "error" es en realidad una petición de verificación.
       if (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("verifica")) {
-        setEmailState(values.email);
-        // setShowModal(true); // This will be handled by the calling component
-        return { success: false, mfaRequired: true, email: values.email, message: errorMessage, navigate, login: () => {} };
+        
+        // Esto no es un error, es el siguiente paso. Usamos un toast informativo (opcional pero recomendado).
+        toast("Se requiere un paso de verificación adicional."); 
+        
+        setEmailState(values.email); // Guardamos el email para el siguiente paso
+        return { 
+          success: false, 
+          mfaRequired: true, 
+          email: values.email, 
+          message: errorMessage, 
+          navigate, 
+          login: () => {} 
+        };
+
       } else {
-        console.log("No se requiere verificación OTP o error desconocido.");
-        return { success: false, message: errorMessage, navigate, login: () => {} };
+        // SI NO es una petición de verificación, ENTONCES SÍ es un error real (ej: credenciales incorrectas).
+        toast.error("Error: " + errorMessage);
+        return { 
+          success: false, 
+          message: errorMessage, 
+          navigate, 
+          login: () => {} 
+        };
       }
+      // --- FIN DE LA LÓGICA CORREGIDA ---
     }
   } catch (error) {
-    toast.error("Error en la petición");
+    toast.error("Error en la conexión con el servidor.");
     console.error("Error en la petición:", error);
     return { success: false, message: "Error en la petición de red.", navigate, login: () => {} };
-  } finally {
-    setIsLoading(false);
   }
+  // La gestión de setIsLoading(false) ya la hace el componente `LoginForm`
 };
 
 export const handleVerifyOtpHelper = async ({
